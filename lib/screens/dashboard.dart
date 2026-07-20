@@ -1,0 +1,191 @@
+import 'package:flutter/material.dart';
+
+import '../format.dart';
+import '../widgets.dart';
+import 'customer_form.dart';
+import 'home.dart';
+
+class DashboardScreen extends StatelessWidget {
+  const DashboardScreen({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    final l = LedgerScope.of(context);
+    final overdue = l.overdueList;
+    final recent = l.recentActivity;
+
+    return ListView(
+      padding: const EdgeInsets.fromLTRB(18, 20, 18, 28),
+      children: [
+        const Text('Ýazdyr',
+            style: TextStyle(fontSize: 24, fontWeight: FontWeight.w800)),
+        const SizedBox(height: 2),
+        Text(l.t('tagline'),
+            style: TextStyle(
+                fontSize: 12,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6))),
+        const SizedBox(height: 18),
+
+        // Stat cards
+        Row(children: [
+          Expanded(
+              child: statCard(context,
+                  kicker: 'Total Customers',
+                  value: '${l.totalCustomers}',
+                  valueSize: 28)),
+          const SizedBox(width: 10),
+          Expanded(
+              child: statCard(context,
+                  kicker: 'Outstanding Debt',
+                  value: money(l.totalOutstanding),
+                  accent: true,
+                  valueSize: 22)),
+        ]),
+        const SizedBox(height: 10),
+        statCard(context,
+            kicker: "Today's Credit Sales",
+            value: money(l.todayCredit),
+            valueSize: 24),
+        const SizedBox(height: 22),
+
+        // Quick actions
+        sectionHeader(context, 'Quick Actions'),
+        Row(children: [
+          _quickAction(context, Icons.add, l.t('addCustomer'), () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => const CustomerFormScreen()));
+          }),
+          const SizedBox(width: 8),
+          _quickAction(context, Icons.credit_card, 'New Credit', () {
+            switchToTab(context, 1);
+            showToast(context, 'Select a customer to add a credit entry');
+          }),
+          const SizedBox(width: 8),
+          _quickAction(context, Icons.payments_outlined, 'Record Payment', () {
+            switchToTab(context, 1);
+            showToast(context, 'Select a customer to record a payment');
+          }),
+        ]),
+        const SizedBox(height: 26),
+
+        // Highest debt
+        sectionHeader(context, 'Highest Debt'),
+        boxList(context, [
+          Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Flexible(
+                    child: Text(l.highestDebtName,
+                        maxLines: 1, overflow: TextOverflow.ellipsis,
+                        style: const TextStyle(fontSize: 13))),
+                Text(l.highestDebtLabel,
+                    style: TextStyle(
+                        fontSize: 13,
+                        color: Theme.of(context).colorScheme.primary,
+                        fontFeatures: const [FontFeature.tabularFigures()])),
+              ],
+            ),
+          ),
+        ]),
+        const SizedBox(height: 26),
+
+        // Longest without payment
+        sectionHeader(context, 'Longest Without Payment'),
+        boxList(context, [
+          for (final o in overdue)
+            _divRow(context,
+                title: o.name, subtitle: o.subLabel, amount: money(o.balance)),
+        ]),
+        const SizedBox(height: 26),
+
+        // Recent activity
+        sectionHeader(context, 'Recent Activity',
+            trailing: GestureDetector(
+                onTap: () => switchToTab(context, 2),
+                child: Text('See all',
+                    style: TextStyle(
+                        fontSize: 12,
+                        color: Theme.of(context).colorScheme.primary)))),
+        boxList(context, [
+          for (final a in recent)
+            txRow(context,
+                title: a.customerName,
+                subtitle: '${shortDate(a.txn.date)} · ${a.txn.label}',
+                amount: money(a.txn.amount),
+                isCredit: a.txn.isCredit),
+        ]),
+      ],
+    );
+  }
+
+  Widget _quickAction(
+      BuildContext context, IconData icon, String label, VoidCallback onTap) {
+    return Expanded(
+      child: SizedBox(
+        height: 66,
+        child: FilledButton.tonal(
+          onPressed: onTap,
+          style: FilledButton.styleFrom(
+            padding: const EdgeInsets.all(4),
+            shape:
+                RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
+          ),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Icon(icon, size: 16),
+              const SizedBox(height: 6),
+              Text(label,
+                  textAlign: TextAlign.center,
+                  maxLines: 2,
+                  style: const TextStyle(
+                      fontSize: 10.5, fontWeight: FontWeight.w700)),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _divRow(BuildContext context,
+      {required String title,
+      required String subtitle,
+      required String amount}) {
+    final onSurface = Theme.of(context).colorScheme.onSurface;
+    return Container(
+      decoration:
+          BoxDecoration(border: Border(bottom: BorderSide(color: Theme.of(context).dividerColor))),
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+      child: Row(
+        children: [
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(title,
+                    maxLines: 1, overflow: TextOverflow.ellipsis,
+                    style: const TextStyle(fontSize: 13)),
+                const SizedBox(height: 2),
+                Text(subtitle,
+                    maxLines: 1, overflow: TextOverflow.ellipsis,
+                    style: TextStyle(
+                        fontSize: 11,
+                        color: onSurface.withValues(alpha: 0.55))),
+              ],
+            ),
+          ),
+          Text(amount,
+              style: TextStyle(
+                  fontSize: 13,
+                  color: Theme.of(context).colorScheme.primary,
+                  fontFeatures: const [FontFeature.tabularFigures()])),
+        ],
+      ),
+    );
+  }
+}

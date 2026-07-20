@@ -1,0 +1,75 @@
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:path_provider/path_provider.dart';
+
+import 'ledger.dart';
+import 'screens/home.dart';
+import 'store.dart';
+import 'theme.dart';
+import 'widgets.dart';
+
+void main() {
+  WidgetsFlutterBinding.ensureInitialized();
+  runApp(const YazdyrApp());
+}
+
+class YazdyrApp extends StatefulWidget {
+  const YazdyrApp({super.key});
+
+  @override
+  State<YazdyrApp> createState() => _YazdyrAppState();
+}
+
+class _YazdyrAppState extends State<YazdyrApp> {
+  Ledger? _ledger;
+
+  @override
+  void initState() {
+    super.initState();
+    _bootstrap();
+  }
+
+  Future<void> _bootstrap() async {
+    final docs = await getApplicationDocumentsDirectory();
+    Directory exportDir = docs;
+    try {
+      final ext = await getExternalStorageDirectory();
+      if (ext != null) exportDir = ext;
+    } catch (_) {
+      // Non-Android platforms: fall back to the documents dir for exports.
+    }
+    final ledger = Ledger(Store(docs, exportDir: exportDir));
+    await ledger.init();
+    if (mounted) setState(() => _ledger = ledger);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    final ledger = _ledger;
+    if (ledger == null) {
+      // Splash while the local database opens/seeds (mirrors prototype splash).
+      return MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: lightTheme,
+        home: const SplashScreen(),
+      );
+    }
+    return LedgerScope(
+      ledger: ledger,
+      child: Builder(
+        builder: (context) {
+          final l = LedgerScope.of(context); // subscribe to theme changes
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'Ýazdyr',
+            theme: lightTheme,
+            darkTheme: darkTheme,
+            themeMode: l.theme == 'dark' ? ThemeMode.dark : ThemeMode.light,
+            home: const HomeShell(),
+          );
+        },
+      ),
+    );
+  }
+}
