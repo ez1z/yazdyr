@@ -1,54 +1,82 @@
 # Ýazdyr
 
-Offline-first credit ledger for small shops (Turkmen market — TMT currency, EN/TK, `+993` phones).
-Flutter Android app, implemented from the Claude Design prototype `Yazdyr Prototype.dc.html`.
-
-Everything runs on-device: no server, no account, no internet required.
+Offline-first credit ledger for small shops (Turkmen market — TMT, EN/TK, `+993`).
+Flutter Android app. Everything runs on-device: no server, no account, no internet.
 
 ## Features
 
-- **Dashboard** — total customers, outstanding debt, today's credit sales, highest debt, longest-without-payment, recent activity.
-- **Customers** — searchable (name/phone) and sortable (A–Z / highest debt / recent) list, add/edit, empty-state preview.
-- **Customer detail** — running balance, transaction history, Add Credit / Record Payment.
-- **Activity** — feed filtered by period (today/week/month/custom range), type (all/credit/payment), sort (newest/amount).
-- **Reports** — total credit given, payments received, outstanding balance.
+- **Dashboard** — customers, outstanding debt, today's credit sales, highest debt, longest-without-payment, recent activity.
+- **Customers** — searchable (name/phone) and sortable (A–Z / debt / recent) list, add/edit, running balance + history per customer.
+- **Activity** — feed filtered by period (today/week/month/custom), type (credit/payment), and sort (newest/amount).
+- **Reports** — credit given, payments received, outstanding balance.
 - **Backup & Restore** — export/restore the ledger as a JSON file.
-- **Settings** — language (EN/TK, partial per the prototype) and light/dark theme, both persisted.
+- **Settings** — language (EN/TK, partial) and light/dark theme, both persisted.
 
 ## Run
 
 ```bash
 flutter pub get
-flutter run          # on a connected Android device / emulator
-flutter test         # ledger logic: balances, credit/payment, search/sort, persistence
+flutter run       # connected Android device / emulator
+flutter test      # ledger logic: balances, credit/payment, search/sort, persistence
 flutter analyze
 ```
 
 ## Architecture
 
-| File | Role |
+State lives in a single `Ledger` (`ChangeNotifier`), exposed to the widget tree via
+`LedgerScope` (an `InheritedNotifier`) — no external state-management dependency. Screens
+read computed getters and call mutation methods; every mutation calls `notifyListeners()`
+then persists.
+
+```
+UI (screens/) ──reads──▶ Ledger getters (computed)
+     │                        ▲
+     └──calls──▶ Ledger mutations ──▶ Store.save() ──▶ ledger.json
+```
+
+**Data model** (`lib/models.dart`):
+
+- `Customer { id, name, phone, address, notes, transactions[] }`
+- `Txn { id, type: 'credit'|'payment', amount, label, date }`
+- `balance = Σ credits − Σ payments`; transactions are kept sorted newest-first.
+
+**Persistence** (`lib/store.dart`) is a JSON key-value store (`ledger.json`). It's an
+intentional seam: swap it for a `sqflite` implementation behind the same
+`load` / `save` / `exportTo` / `importLatest` surface and nothing else changes. (SQLite was
+the intended backend but was unreachable in the offline build environment.)
+
+### File map
+
+| Path | Role |
 |------|------|
-| `lib/models.dart` | `Customer` / `Txn`, balance = Σcredits − Σpayments |
-| `lib/seed.dart` | 14 sample customers, seeded on first launch only |
-| `lib/store.dart` | JSON-file persistence (`ledger.json`) + export/import |
-| `lib/ledger.dart` | `Ledger` `ChangeNotifier` — state, actions, computed values |
-| `lib/format.dart` | money/date formatting, partial EN/TK strings |
+| `lib/models.dart` | `Customer` / `Txn`, balance math |
+| `lib/ledger.dart` | `Ledger` — state, mutations, `renderVals`-style computed getters |
+| `lib/store.dart` | JSON persistence + export/import |
+| `lib/seed.dart` | sample customers, seeded on first launch only |
+| `lib/format.dart` | money/date formatting, EN/TK strings (`tr`) |
 | `lib/theme.dart` | light/dark themes from the prototype design tokens |
 | `lib/widgets.dart` | `LedgerScope` + shared UI pieces |
 | `lib/screens/` | one screen per prototype view |
 
-State flows through a single `Ledger` exposed via `LedgerScope` (an `InheritedNotifier`) —
-no external state-management dependency.
+The app is ported from the Claude Design prototype `Yazdyr Prototype.dc.html` — its
+`renderVals()` / `computeCustomer` are the behavioral spec, mirrored in `ledger.dart`.
 
-## Notes / deviations from the prototype
+## Contributing
 
-- **Persistence is a JSON key-value store, not SQLite.** SQLite (`sqflite`) was the intended choice,
-  but it and `file_picker`/`share_plus` were unavailable in the offline build environment (pub.dev
-  unreachable). The JSON store in `store.dart` is a drop-in seam: swap it for a `sqflite` implementation
-  with the same `load`/`save`/`exportTo`/`importLatest` surface — nothing else in the app changes.
-- **Closed prototype gaps:** customer search + sort are actually applied (the prototype wired the UI but
-  ignored it), and backup/export do real file I/O instead of just showing a toast.
-- **Backup restore** reads the most recent `yazdyr-*.json` export (no file browser offline).
-- `TODAY` is the real `DateTime.now()`; seed data keeps its fixed 2026-07 dates, so "Today's Credit
-  Sales" reflects the real date.
-- Turkmen localization is partial, matching the prototype's `STR` map.
+1. Fork, branch, and make sure `flutter analyze` and `flutter test` pass before opening a PR.
+2. **Stay offline-first** — no server calls, no telemetry, no cloud deps.
+3. **No new state-management deps.** Add state as fields/getters/methods on `Ledger`; keep
+   computed values as getters so they mirror the prototype's `renderVals`.
+4. **Persisted vs. transient** — anything that must survive a restart goes into `LedgerData`
+   and `_persist()`; filter/search/selection state stays transient (see the sections in
+   `ledger.dart`).
+5. Behavior should match `Yazdyr Prototype.dc.html`; note any deliberate deviation in the PR.
+6. Cover non-trivial ledger logic (balances, filters, import/export) with a test.
+
+Good first issues: finish the Turkmen (`tk`) strings in `format.dart`, add a real file
+picker for restore, or add per-customer transaction editing/deletion.
+
+---
+
+> Or just fork this, copy the README verbatim, and hand it to the AI whose output
+> you'll never actually read or understand. We won't tell.
