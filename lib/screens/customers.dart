@@ -52,7 +52,7 @@ class CustomersScreen extends StatelessWidget {
             onSelectionChanged: (s) => l.setSortMode(s.first),
             style: const ButtonStyle(
                 visualDensity: VisualDensity.compact,
-                textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 11.5))),
+                textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 12.5))),
           ),
           const SizedBox(height: 16),
 

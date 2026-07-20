@@ -100,6 +100,9 @@ class HomeShell extends StatefulWidget {
 
 class _HomeShellState extends State<HomeShell> {
   int _index = 0;
+  // Visited-tab stack so the system back gesture returns to the previous tab
+  // instead of quitting; empty stack means back exits the app.
+  final List<int> _history = [];
 
   @override
   Widget build(BuildContext context) {
@@ -110,11 +113,23 @@ class _HomeShellState extends State<HomeShell> {
       ActivityScreen(),
       SettingsScreen(),
     ];
-    return Scaffold(
+    return PopScope(
+      canPop: _history.isEmpty,
+      onPopInvokedWithResult: (didPop, _) {
+        if (didPop || _history.isEmpty) return;
+        setState(() => _index = _history.removeLast());
+      },
+      child: Scaffold(
       body: SafeArea(child: IndexedStack(index: _index, children: tabs)),
-      bottomNavigationBar: NavigationBar(
+      // Keep nav labels on one line regardless of language/system font scale;
+      // NavigationBar's label Text inherits softWrap/maxLines from DefaultTextStyle.
+      bottomNavigationBar: DefaultTextStyle.merge(
+        softWrap: false,
+        maxLines: 1,
+        overflow: TextOverflow.ellipsis,
+        child: NavigationBar(
         selectedIndex: _index,
-        onDestinationSelected: (i) => setState(() => _index = i),
+        onDestinationSelected: goToTab,
         destinations: [
           NavigationDestination(
               icon: const Icon(Icons.dashboard_outlined),
@@ -132,12 +147,22 @@ class _HomeShellState extends State<HomeShell> {
               selectedIcon: const Icon(Icons.settings),
               label: l.t('navSettings')),
         ],
+        ),
+      ),
       ),
     );
   }
 
-  // Lets child screens jump to the Customers tab (e.g. dashboard quick actions).
-  void goToTab(int i) => setState(() => _index = i);
+  // Lets child screens jump to a tab (e.g. dashboard quick actions), recording
+  // the current tab so back returns here.
+  void goToTab(int i) {
+    if (i == _index) return;
+    setState(() {
+      _history.remove(i); // keep one entry per tab; avoid unbounded growth
+      _history.add(_index);
+      _index = i;
+    });
+  }
 }
 
 // Helper so any descendant can switch the primary tab (0..3).

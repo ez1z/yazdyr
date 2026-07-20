@@ -38,7 +38,7 @@ String todayIso() {
 // User-entered data (transaction labels, customer names) is NOT translated.
 const Map<String, Map<String, String>> _str = {
   // Nav / shell
-  'navDashboard': {'en': 'Dashboard', 'tk': 'Esasy Sahypa', 'ru': 'Главная'},
+  'navDashboard': {'en': 'Dashboard', 'tk': 'Esasy', 'ru': 'Главная'},
   'navCustomers': {'en': 'Customers', 'tk': 'Müşderiler', 'ru': 'Клиенты'},
   'navActivity': {'en': 'Activity', 'tk': 'Işjeňlik', 'ru': 'Активность'},
   'navSettings': {'en': 'Settings', 'tk': 'Sazlamalar', 'ru': 'Настройки'},

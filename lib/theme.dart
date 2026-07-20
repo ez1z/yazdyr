@@ -62,7 +62,7 @@ ThemeData _build({
       backgroundColor: bg,
       indicatorColor: accent.withValues(alpha: 0.16),
       labelTextStyle: WidgetStatePropertyAll(
-        TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: text),
+        TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: text),
       ),
     ),
   );

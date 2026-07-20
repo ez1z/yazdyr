@@ -102,7 +102,7 @@ class ActivityScreen extends StatelessWidget {
       style: const ButtonStyle(
           visualDensity: VisualDensity.compact,
           tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 10.5))),
+          textStyle: WidgetStatePropertyAll(TextStyle(fontSize: 12))),
     );
   }
 
