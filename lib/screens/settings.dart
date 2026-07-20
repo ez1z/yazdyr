@@ -24,6 +24,7 @@ class SettingsScreen extends StatelessWidget {
             segments: const [
               ButtonSegment(value: 'en', label: Text('EN')),
               ButtonSegment(value: 'tk', label: Text('TK')),
+              ButtonSegment(value: 'ru', label: Text('RU')),
             ],
             selected: {l.language},
             showSelectedIcon: false,

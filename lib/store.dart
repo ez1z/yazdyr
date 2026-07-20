@@ -9,11 +9,11 @@ import 'models.dart';
 class LedgerData {
   final List<Customer> customers;
   final String theme; // 'light' | 'dark'
-  final String language; // 'en' | 'tk'
+  final String language; // 'en' | 'tk' | 'ru'
   const LedgerData({
     required this.customers,
     this.theme = 'light',
-    this.language = 'en',
+    this.language = 'tk',
   });
 
   Map<String, dynamic> toJson() => {
@@ -29,7 +29,7 @@ class LedgerData {
           .map((e) => Customer.fromJson(e as Map<String, dynamic>))
           .toList(),
       theme: (meta['theme'] as String?) ?? 'light',
-      language: (meta['language'] as String?) ?? 'en',
+      language: (meta['language'] as String?) ?? 'tk',
     );
   }
 }

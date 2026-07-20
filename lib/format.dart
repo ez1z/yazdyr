@@ -38,188 +38,209 @@ String todayIso() {
 // User-entered data (transaction labels, customer names) is NOT translated.
 const Map<String, Map<String, String>> _str = {
   // Nav / shell
-  'navDashboard': {'en': 'Dashboard', 'tk': 'Esasy Sahypa'},
-  'navCustomers': {'en': 'Customers', 'tk': 'Müşderiler'},
-  'navActivity': {'en': 'Activity', 'tk': 'Işjeňlik'},
-  'navSettings': {'en': 'Settings', 'tk': 'Sazlamalar'},
-  'tagline': {'en': 'Offline credit ledger', 'tk': 'Oflaýn karz depderi'},
+  'navDashboard': {'en': 'Dashboard', 'tk': 'Esasy Sahypa', 'ru': 'Главная'},
+  'navCustomers': {'en': 'Customers', 'tk': 'Müşderiler', 'ru': 'Клиенты'},
+  'navActivity': {'en': 'Activity', 'tk': 'Işjeňlik', 'ru': 'Активность'},
+  'navSettings': {'en': 'Settings', 'tk': 'Sazlamalar', 'ru': 'Настройки'},
+  'tagline': {'en': 'Offline credit ledger', 'tk': 'Oflaýn karz depderi', 'ru': 'Офлайн-книга долгов'},
   'splashTagline': {
     'en': 'Offline-first credit ledger for small shops',
-    'tk': 'Dükanlar üçin oflaýn karz depderi'
+    'tk': 'Dükanlar üçin oflaýn karz depderi',
+    'ru': 'Офлайн-книга долгов для небольших магазинов'
   },
   'loadingDb': {
     'en': 'LOADING LOCAL DATABASE…',
-    'tk': 'MAGLUMAT BAZASY AÇYLÝAR…'
+    'tk': 'MAGLUMAT BAZASY AÇYLÝAR…',
+    'ru': 'ЗАГРУЗКА ЛОКАЛЬНОЙ БАЗЫ…'
   },
 
   // Dashboard
-  'statTotalCustomers': {'en': 'Total Customers', 'tk': 'Jemi müşderiler'},
-  'statOutstandingDebt': {'en': 'Outstanding Debt', 'tk': 'Galan bergi'},
-  'statTodayCredit': {'en': "Today's Credit Sales", 'tk': 'Şu günki karz satuwy'},
-  'quickActions': {'en': 'Quick Actions', 'tk': 'Çalt amallar'},
-  'newCredit': {'en': 'New Credit', 'tk': 'Täze karz'},
-  'highestDebt': {'en': 'Highest Debt', 'tk': 'Iň ýokary bergi'},
-  'noDebts': {'en': 'No debts', 'tk': 'Bergi ýok'},
+  'statTotalCustomers': {'en': 'Total Customers', 'tk': 'Jemi müşderiler', 'ru': 'Всего клиентов'},
+  'statOutstandingDebt': {'en': 'Outstanding Debt', 'tk': 'Galan bergi', 'ru': 'Остаток долга'},
+  'statTodayCredit': {'en': "Today's Credit Sales", 'tk': 'Şu günki karz satuwy', 'ru': 'Долги за сегодня'},
+  'quickActions': {'en': 'Quick Actions', 'tk': 'Çalt amallar', 'ru': 'Быстрые действия'},
+  'newCredit': {'en': 'New Credit', 'tk': 'Täze karz', 'ru': 'Новый долг'},
+  'highestDebt': {'en': 'Highest Debt', 'tk': 'Iň ýokary bergi', 'ru': 'Наибольший долг'},
+  'noDebts': {'en': 'No debts', 'tk': 'Bergi ýok', 'ru': 'Нет долгов'},
   'longestWithoutPayment': {
     'en': 'Longest Without Payment',
-    'tk': 'Iň uzak tölemedik'
+    'tk': 'Iň uzak tölemedik',
+    'ru': 'Дольше всех без оплаты'
   },
-  'recentActivity': {'en': 'Recent Activity', 'tk': 'Soňky işjeňlik'},
-  'seeAll': {'en': 'See all', 'tk': 'Ählisini gör'},
+  'recentActivity': {'en': 'Recent Activity', 'tk': 'Soňky işjeňlik', 'ru': 'Недавняя активность'},
+  'seeAll': {'en': 'See all', 'tk': 'Ählisini gör', 'ru': 'Показать всё'},
   'selectCustomerCredit': {
     'en': 'Select a customer to add a credit entry',
-    'tk': 'Karz ýazmak üçin müşderi saýlaň'
+    'tk': 'Karz ýazmak üçin müşderi saýlaň',
+    'ru': 'Выберите клиента, чтобы добавить долг'
   },
   'selectCustomerPayment': {
     'en': 'Select a customer to record a payment',
-    'tk': 'Töleg bellemek üçin müşderi saýlaň'
+    'tk': 'Töleg bellemek üçin müşderi saýlaň',
+    'ru': 'Выберите клиента, чтобы записать оплату'
   },
-  'lastPaid': {'en': 'Last paid {date}', 'tk': 'Soňky töleg {date}'},
-  'noPaymentRecorded': {'en': 'No payment recorded', 'tk': 'Töleg bellenmedik'},
+  'lastPaid': {'en': 'Last paid {date}', 'tk': 'Soňky töleg {date}', 'ru': 'Последняя оплата {date}'},
+  'noPaymentRecorded': {'en': 'No payment recorded', 'tk': 'Töleg bellenmedik', 'ru': 'Оплат не записано'},
 
   // Customers
-  'addCustomer': {'en': 'Add Customer', 'tk': 'Müşderi goşmak'},
+  'addCustomer': {'en': 'Add Customer', 'tk': 'Müşderi goşmak', 'ru': 'Добавить клиента'},
   'searchHint': {
     'en': 'Search by name or phone',
-    'tk': 'At ýa-da telefon boýunça gözle'
+    'tk': 'At ýa-da telefon boýunça gözle',
+    'ru': 'Поиск по имени или телефону'
   },
-  'sortHighestDebt': {'en': 'Highest debt', 'tk': 'Iň ýokary bergi'},
-  'sortRecent': {'en': 'Recent', 'tk': 'Soňky'},
+  'sortHighestDebt': {'en': 'Highest debt', 'tk': 'Iň ýokary bergi', 'ru': 'Наибольший долг'},
+  'sortRecent': {'en': 'Recent', 'tk': 'Soňky', 'ru': 'Недавние'},
   'showSampleCustomers': {
     'en': 'Show sample customers',
-    'tk': 'Nusga müşderileri görkez'
+    'tk': 'Nusga müşderileri görkez',
+    'ru': 'Показать примеры клиентов'
   },
-  'previewEmpty': {'en': 'Preview empty state', 'tk': 'Boş ýagdaýy görkez'},
-  'noCustomers': {'en': 'No customers yet', 'tk': 'Entek müşderi ýok'},
+  'previewEmpty': {'en': 'Preview empty state', 'tk': 'Boş ýagdaýy görkez', 'ru': 'Показать пустой вид'},
+  'noCustomers': {'en': 'No customers yet', 'tk': 'Entek müşderi ýok', 'ru': 'Пока нет клиентов'},
   'addFirstCustomer': {
     'en': 'Add your first customer to start tracking credit.',
-    'tk': 'Karzy yzarlamak üçin ilkinji müşderiňizi goşuň.'
+    'tk': 'Karzy yzarlamak üçin ilkinji müşderiňizi goşuň.',
+    'ru': 'Добавьте первого клиента, чтобы вести учёт долгов.'
   },
 
   // Customer detail
-  'currentBalance': {'en': 'CURRENT BALANCE', 'tk': 'HÄZIRKI BALANS'},
-  'addCredit': {'en': 'Add Credit', 'tk': 'Karz goşmak'},
-  'recordPayment': {'en': 'Record Payment', 'tk': 'Töleg bellemek'},
-  'editCustomer': {'en': 'Edit Customer', 'tk': 'Müşderini üýtget'},
-  'deleteCustomer': {'en': 'Delete Customer', 'tk': 'Müşderini poz'},
+  'currentBalance': {'en': 'CURRENT BALANCE', 'tk': 'HÄZIRKI BALANS', 'ru': 'ТЕКУЩИЙ БАЛАНС'},
+  'addCredit': {'en': 'Add Credit', 'tk': 'Karz goşmak', 'ru': 'Добавить долг'},
+  'recordPayment': {'en': 'Record Payment', 'tk': 'Töleg bellemek', 'ru': 'Записать оплату'},
+  'editCustomer': {'en': 'Edit Customer', 'tk': 'Müşderini üýtget', 'ru': 'Изменить клиента'},
+  'deleteCustomer': {'en': 'Delete Customer', 'tk': 'Müşderini poz', 'ru': 'Удалить клиента'},
   'deleteCustomerConfirm': {
     'en': 'Delete {name} and all their transactions? This cannot be undone.',
-    'tk': '{name} we onuň ähli amallaryny pozmakçymy? Bu yzyna gaýtaryp bolmaýar.'
+    'tk': '{name} we onuň ähli amallaryny pozmakçymy? Bu yzyna gaýtaryp bolmaýar.',
+    'ru': 'Удалить {name} и все операции? Это действие необратимо.'
   },
-  'cancel': {'en': 'Cancel', 'tk': 'Ýatyr'},
-  'delete': {'en': 'Delete', 'tk': 'Poz'},
-  'toastCustomerDeleted': {'en': 'Customer deleted', 'tk': 'Müşderi pozuldy'},
-  'transactionHistory': {'en': 'Transaction History', 'tk': 'Amallar taryhy'},
-  'editTransaction': {'en': 'Edit Transaction', 'tk': 'Amaly üýtget'},
-  'type': {'en': 'Type', 'tk': 'Görnüşi'},
+  'cancel': {'en': 'Cancel', 'tk': 'Ýatyr', 'ru': 'Отмена'},
+  'delete': {'en': 'Delete', 'tk': 'Poz', 'ru': 'Удалить'},
+  'toastCustomerDeleted': {'en': 'Customer deleted', 'tk': 'Müşderi pozuldy', 'ru': 'Клиент удалён'},
+  'transactionHistory': {'en': 'Transaction History', 'tk': 'Amallar taryhy', 'ru': 'История операций'},
+  'editTransaction': {'en': 'Edit Transaction', 'tk': 'Amaly üýtget', 'ru': 'Изменить операцию'},
+  'type': {'en': 'Type', 'tk': 'Görnüşi', 'ru': 'Тип'},
   'toastTransactionUpdated': {
     'en': 'Transaction updated',
-    'tk': 'Amal täzelendi'
+    'tk': 'Amal täzelendi',
+    'ru': 'Операция обновлена'
   },
-  'deleteTransaction': {'en': 'Delete Transaction', 'tk': 'Amaly poz'},
+  'deleteTransaction': {'en': 'Delete Transaction', 'tk': 'Amaly poz', 'ru': 'Удалить операцию'},
   'deleteTransactionConfirm': {
     'en': 'Delete this transaction? This cannot be undone.',
-    'tk': 'Bu amal pozulsynmy? Bu yzyna gaýtaryp bolmaýar.'
+    'tk': 'Bu amal pozulsynmy? Bu yzyna gaýtaryp bolmaýar.',
+    'ru': 'Удалить эту операцию? Это действие необратимо.'
   },
   'toastTransactionDeleted': {
     'en': 'Transaction deleted',
-    'tk': 'Amal pozuldy'
+    'tk': 'Amal pozuldy',
+    'ru': 'Операция удалена'
   },
 
   // Customer form
-  'fullName': {'en': 'Full Name *', 'tk': 'Doly ady *'},
-  'phoneNumber': {'en': 'Phone Number', 'tk': 'Telefon belgisi'},
-  'address': {'en': 'Address', 'tk': 'Salgysy'},
-  'notes': {'en': 'Notes', 'tk': 'Bellikler'},
-  'hintFullName': {'en': 'e.g. Aýgül Berdiýewa', 'tk': 'meselem: Aýgül Berdiýewa'},
-  'hintAddress': {'en': 'Neighborhood, city', 'tk': 'dom kwartira nomer'},
-  'hintNotes': {'en': 'Optional notes', 'tk': 'Islege bagly bellikler'},
-  'saveChanges': {'en': 'Save Changes', 'tk': 'Üýtgetmeleri ýatda sakla'},
-  'saveCustomer': {'en': 'Save Customer', 'tk': 'Müşderini ýatda sakla'},
-  'toastCustomerUpdated': {'en': 'Customer updated', 'tk': 'Müşderi täzelendi'},
-  'toastCustomerAdded': {'en': 'Customer added', 'tk': 'Müşderi goşuldy'},
+  'fullName': {'en': 'Full Name *', 'tk': 'Doly ady *', 'ru': 'Полное имя *'},
+  'phoneNumber': {'en': 'Phone Number', 'tk': 'Telefon belgisi', 'ru': 'Номер телефона'},
+  'address': {'en': 'Address', 'tk': 'Salgysy', 'ru': 'Адрес'},
+  'notes': {'en': 'Notes', 'tk': 'Bellikler', 'ru': 'Заметки'},
+  'hintFullName': {'en': 'e.g. Aýgül Berdiýewa', 'tk': 'meselem: Aýgül Berdiýewa', 'ru': 'напр. Айгуль Бердыева'},
+  'hintAddress': {'en': 'Neighborhood, city', 'tk': 'dom kwartira nomer', 'ru': 'район, город'},
+  'hintNotes': {'en': 'Optional notes', 'tk': 'Islege bagly bellikler', 'ru': 'Необязательные заметки'},
+  'saveChanges': {'en': 'Save Changes', 'tk': 'Üýtgetmeleri ýatda sakla', 'ru': 'Сохранить изменения'},
+  'saveCustomer': {'en': 'Save Customer', 'tk': 'Müşderini ýatda sakla', 'ru': 'Сохранить клиента'},
+  'toastCustomerUpdated': {'en': 'Customer updated', 'tk': 'Müşderi täzelendi', 'ru': 'Клиент обновлён'},
+  'toastCustomerAdded': {'en': 'Customer added', 'tk': 'Müşderi goşuldy', 'ru': 'Клиент добавлен'},
 
   // Add credit / record payment
-  'forCustomer': {'en': 'For {name}', 'tk': '{name} üçin'},
-  'amountTmt': {'en': 'Amount (TMT) *', 'tk': 'Möçberi (TMT) *'},
-  'description': {'en': 'Description', 'tk': 'Düşündiriş'},
-  'hintCreditDesc': {'en': 'e.g. Milk, Bread', 'tk': 'meselem: Süýt, Çörek'},
-  'date': {'en': 'Date', 'tk': 'Sene'},
-  'saveCredit': {'en': 'Save Credit', 'tk': 'Karzy ýatda sakla'},
-  'toastCreditSaved': {'en': 'Credit saved', 'tk': 'Karz ýatda saklandy'},
-  'savePayment': {'en': 'Save Payment', 'tk': 'Tölegi ýatda sakla'},
-  'toastPaymentRecorded': {'en': 'Payment recorded', 'tk': 'Töleg bellendi'},
+  'forCustomer': {'en': 'For {name}', 'tk': '{name} üçin', 'ru': 'Для {name}'},
+  'amountTmt': {'en': 'Amount (TMT) *', 'tk': 'Möçberi (TMT) *', 'ru': 'Сумма (TMT) *'},
+  'description': {'en': 'Description', 'tk': 'Düşündiriş', 'ru': 'Описание'},
+  'hintCreditDesc': {'en': 'e.g. Milk, Bread', 'tk': 'meselem: Süýt, Çörek', 'ru': 'напр. Молоко, Хлеб'},
+  'date': {'en': 'Date', 'tk': 'Sene', 'ru': 'Дата'},
+  'saveCredit': {'en': 'Save Credit', 'tk': 'Karzy ýatda sakla', 'ru': 'Сохранить долг'},
+  'toastCreditSaved': {'en': 'Credit saved', 'tk': 'Karz ýatda saklandy', 'ru': 'Долг сохранён'},
+  'savePayment': {'en': 'Save Payment', 'tk': 'Tölegi ýatda sakla', 'ru': 'Сохранить оплату'},
+  'toastPaymentRecorded': {'en': 'Payment recorded', 'tk': 'Töleg bellendi', 'ru': 'Оплата записана'},
 
   // Activity
-  'periodToday': {'en': 'Today', 'tk': 'Şu gün'},
-  'periodWeek': {'en': 'Week', 'tk': 'Hepde'},
-  'periodMonth': {'en': 'Month', 'tk': 'Aý'},
-  'periodCustom': {'en': 'Custom', 'tk': 'Saýlama'},
-  'typeAll': {'en': 'All', 'tk': 'Ählisi'},
-  'typeCredit': {'en': 'Credit', 'tk': 'Karz'},
-  'typePayment': {'en': 'Payment', 'tk': 'Töleg'},
-  'sortNewest': {'en': 'Newest', 'tk': 'Iň täze'},
-  'sortAmount': {'en': 'Amount', 'tk': 'Möçber'},
-  'dateFrom': {'en': 'From', 'tk': 'Başlangyç'},
-  'dateTo': {'en': 'To', 'tk': 'Ahyry'},
-  'dateSep': {'en': 'to', 'tk': 'çenli'},
+  'periodToday': {'en': 'Today', 'tk': 'Şu gün', 'ru': 'Сегодня'},
+  'periodWeek': {'en': 'Week', 'tk': 'Hepde', 'ru': 'Неделя'},
+  'periodMonth': {'en': 'Month', 'tk': 'Aý', 'ru': 'Месяц'},
+  'periodCustom': {'en': 'Custom', 'tk': 'Saýlama', 'ru': 'Свой период'},
+  'typeAll': {'en': 'All', 'tk': 'Ählisi', 'ru': 'Все'},
+  'typeCredit': {'en': 'Credit', 'tk': 'Karz', 'ru': 'Долг'},
+  'typePayment': {'en': 'Payment', 'tk': 'Töleg', 'ru': 'Оплата'},
+  'sortNewest': {'en': 'Newest', 'tk': 'Iň täze', 'ru': 'Новые'},
+  'sortAmount': {'en': 'Amount', 'tk': 'Möçber', 'ru': 'Сумма'},
+  'dateFrom': {'en': 'From', 'tk': 'Başlangyç', 'ru': 'С'},
+  'dateTo': {'en': 'To', 'tk': 'Ahyry', 'ru': 'По'},
+  'dateSep': {'en': 'to', 'tk': 'çenli', 'ru': 'по'},
 
   // Settings
-  'language': {'en': 'Language', 'tk': 'Dil'},
-  'theme': {'en': 'Theme', 'tk': 'Tema'},
-  'themeLight': {'en': 'Light', 'tk': 'Açyk'},
-  'themeDark': {'en': 'Dark', 'tk': 'Garaňky'},
-  'backupRestore': {'en': 'Backup & Restore', 'tk': 'Ätiýaçlyk we dikeltme'},
-  'reports': {'en': 'Reports', 'tk': 'Hasabatlar'},
-  'about': {'en': 'About', 'tk': 'Barada'},
+  'language': {'en': 'Language', 'tk': 'Dil', 'ru': 'Язык'},
+  'theme': {'en': 'Theme', 'tk': 'Tema', 'ru': 'Тема'},
+  'themeLight': {'en': 'Light', 'tk': 'Açyk', 'ru': 'Светлая'},
+  'themeDark': {'en': 'Dark', 'tk': 'Garaňky', 'ru': 'Тёмная'},
+  'backupRestore': {'en': 'Backup & Restore', 'tk': 'Ätiýaçlyk we dikeltme', 'ru': 'Резервная копия'},
+  'reports': {'en': 'Reports', 'tk': 'Hasabatlar', 'ru': 'Отчёты'},
+  'about': {'en': 'About', 'tk': 'Barada', 'ru': 'О приложении'},
 
   // Backup
-  'exportDatabase': {'en': 'Export Database', 'tk': 'Maglumat bazasyny çykar'},
-  'importDatabase': {'en': 'Import Database', 'tk': 'Maglumat bazasyny getir'},
-  'createBackup': {'en': 'Create Backup', 'tk': 'Ätiýaçlyk döret'},
-  'restoreBackup': {'en': 'Restore Backup', 'tk': 'Ätiýaçlygy dikelt'},
+  'exportDatabase': {'en': 'Export Database', 'tk': 'Maglumat bazasyny çykar', 'ru': 'Экспорт базы данных'},
+  'importDatabase': {'en': 'Import Database', 'tk': 'Maglumat bazasyny getir', 'ru': 'Импорт базы данных'},
+  'createBackup': {'en': 'Create Backup', 'tk': 'Ätiýaçlyk döret', 'ru': 'Создать копию'},
+  'restoreBackup': {'en': 'Restore Backup', 'tk': 'Ätiýaçlygy dikelt', 'ru': 'Восстановить копию'},
   'backupLocalNote': {
     'en': 'Everything works locally — no internet connection required.',
-    'tk': 'Ählisi internetsiz işleýär.'
+    'tk': 'Ählisi internetsiz işleýär.',
+    'ru': 'Всё работает локально — интернет не требуется.'
   },
   'toastBackupCreated': {
     'en': 'Backup created — {name}',
-    'tk': 'Ätiýaçlyk döredildi — {name}'
+    'tk': 'Ätiýaçlyk döredildi — {name}',
+    'ru': 'Копия создана — {name}'
   },
   'toastRestored': {
     'en': 'Database restored from last backup',
-    'tk': 'Maglumat bazasy soňky ätiýaçlykdan dikeldildi'
+    'tk': 'Maglumat bazasy soňky ätiýaçlykdan dikeldildi',
+    'ru': 'База восстановлена из последней копии'
   },
-  'toastNoBackup': {'en': 'No backup found yet', 'tk': 'Entek ätiýaçlyk tapylmady'},
+  'toastNoBackup': {'en': 'No backup found yet', 'tk': 'Entek ätiýaçlyk tapylmady', 'ru': 'Копия пока не найдена'},
 
   // Reports
-  'totalCreditGiven': {'en': 'Total Credit Given', 'tk': 'Berlen jemi karz'},
+  'totalCreditGiven': {'en': 'Total Credit Given', 'tk': 'Berlen jemi karz', 'ru': 'Всего выдано в долг'},
   'totalPaymentsReceived': {
     'en': 'Total Payments Received',
-    'tk': 'Alnan jemi töleg'
+    'tk': 'Alnan jemi töleg',
+    'ru': 'Всего получено оплат'
   },
-  'outstandingBalance': {'en': 'Outstanding Balance', 'tk': 'Galan balans'},
+  'outstandingBalance': {'en': 'Outstanding Balance', 'tk': 'Galan balans', 'ru': 'Остаток баланса'},
 
   // About
-  'version': {'en': 'Version 1.0.0 (MVP)', 'tk': 'Wersiýa 1.0.0 (MVP)'},
-  'aboutOfflineTitle': {'en': 'Offline-first', 'tk': 'Oflaýn ileri tutulýan'},
+  'version': {'en': 'Version 1.0.0 (MVP)', 'tk': 'Wersiýa 1.0.0 (MVP)', 'ru': 'Версия 1.0.0 (MVP)'},
+  'aboutOfflineTitle': {'en': 'Offline-first', 'tk': 'Oflaýn ileri tutulýan', 'ru': 'Работает офлайн'},
   'aboutOfflineBody': {
     'en':
         'All data is stored on this device. Ýazdyr works fully without an internet connection — nothing is sent to a server.',
     'tk':
-        'Ähli maglumat şu enjamda saklanýar. Ýazdyr internet birikmesi bolmazdan doly işleýär — hemme maglumatlar telefonuňyzda galýar.'
+        'Ähli maglumat şu enjamda saklanýar. Ýazdyr internet birikmesi bolmazdan doly işleýär — hemme maglumatlar telefonuňyzda galýar.',
+    'ru':
+        'Все данные хранятся на этом устройстве. Ýazdyr полностью работает без интернета — ничего не отправляется на сервер.'
   },
-  'storageTitle': {'en': 'Storage', 'tk': 'Ammar'},
-  'privacyTitle': {'en': 'Privacy', 'tk': 'Gizlinlik'},
+  'storageTitle': {'en': 'Storage', 'tk': 'Ammar', 'ru': 'Хранилище'},
+  'privacyTitle': {'en': 'Privacy', 'tk': 'Gizlinlik', 'ru': 'Конфиденциальность'},
   'privacyBody': {
     'en':
         'Customer records stay on your phone. Nothing is collected, tracked, or shared.',
     'tk':
-        'Müşderi ýazgylary telefonyňyzda galýar. Hiç zat ýygnalmaýar, yzarlanmaýar ýa-da paýlaşylmaýar.'
+        'Müşderi ýazgylary telefonyňyzda galýar. Hiç zat ýygnalmaýar, yzarlanmaýar ýa-da paýlaşylmaýar.',
+    'ru':
+        'Записи о клиентах остаются на вашем телефоне. Ничего не собирается, не отслеживается и не передаётся.'
   },
   'storageInfo': {
     'en': '{c} customers · {t} transactions · ~{mb} MB',
-    'tk': '{c} müşderi · {t} amal · ~{mb} MB'
+    'tk': '{c} müşderi · {t} amal · ~{mb} MB',
+    'ru': '{c} клиентов · {t} операций · ~{mb} МБ'
   },
 };
 

@@ -27,7 +27,7 @@ class Ledger extends ChangeNotifier {
   // ---- persisted state ----
   List<Customer> customers = const [];
   String theme = 'light';
-  String language = 'en';
+  String language = 'tk';
 
   // ---- transient UI state (not persisted, matches prototype) ----
   String? selectedId;
