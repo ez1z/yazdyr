@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
 import '../format.dart';
+import '../ledger.dart';
 import '../widgets.dart';
 import 'add_credit.dart';
 import 'customer_form.dart';
 import 'record_payment.dart';
+import 'txn_form.dart';
 
 class CustomerDetailScreen extends StatelessWidget {
   const CustomerDetailScreen({super.key});
@@ -29,6 +31,13 @@ class CustomerDetailScreen extends StatelessWidget {
                     fontSize: 12, color: onSurface.withValues(alpha: 0.6))),
           ],
         ),
+        actions: [
+          IconButton(
+            icon: const Icon(Icons.delete_outline),
+            tooltip: l.t('deleteCustomer'),
+            onPressed: () => _confirmDelete(context, l, c.id, c.name),
+          ),
+        ],
       ),
       body: ListView(
         padding: const EdgeInsets.all(18),
@@ -89,14 +98,45 @@ class CustomerDetailScreen extends StatelessWidget {
                   border: Border(
                       bottom:
                           BorderSide(color: Theme.of(context).dividerColor))),
-              child: txRow(context,
-                  title: shortDate(t.date),
-                  subtitle: t.label,
-                  amount: money(t.amount),
-                  isCredit: t.isCredit),
+              child: InkWell(
+                onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                    builder: (_) =>
+                        TxnFormScreen(customerId: c.id, txn: t))),
+                child: txRow(context,
+                    title: shortDate(t.date),
+                    subtitle: t.label,
+                    amount: money(t.amount),
+                    isCredit: t.isCredit),
+              ),
             ),
         ],
       ),
     );
+  }
+
+  Future<void> _confirmDelete(
+      BuildContext context, Ledger l, String id, String name) async {
+    final ok = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        title: Text(l.t('deleteCustomer')),
+        content: Text(l.t('deleteCustomerConfirm').replaceFirst('{name}', name)),
+        actions: [
+          TextButton(
+              onPressed: () => Navigator.of(ctx).pop(false),
+              child: Text(l.t('cancel'))),
+          FilledButton(
+              style: FilledButton.styleFrom(
+                  backgroundColor: Theme.of(ctx).colorScheme.error),
+              onPressed: () => Navigator.of(ctx).pop(true),
+              child: Text(l.t('delete'))),
+        ],
+      ),
+    );
+    if (ok != true || !context.mounted) return;
+    await l.deleteCustomer(id);
+    if (!context.mounted) return;
+    Navigator.of(context).pop(); // back to customers list
+    showToast(context, l.t('toastCustomerDeleted'));
   }
 }

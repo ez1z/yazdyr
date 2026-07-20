@@ -6,9 +6,10 @@ import 'store.dart';
 
 // A transaction paired with its owner's name, for cross-customer lists.
 class ActivityItem {
+  final String customerId;
   final String customerName;
   final Txn txn;
-  const ActivityItem(this.customerName, this.txn);
+  const ActivityItem(this.customerId, this.customerName, this.txn);
 }
 
 class OverdueItem {
@@ -152,6 +153,42 @@ class Ledger extends ChangeNotifier {
     await _persist();
   }
 
+  Future<void> deleteCustomer(String id) async {
+    customers = customers.where((c) => c.id != id).toList();
+    if (selectedId == id) selectedId = null;
+    notifyListeners();
+    await _persist();
+  }
+
+  Future<void> editTxn(String customerId, String txnId,
+      {required String type,
+      required double amount,
+      required String label,
+      required String date}) async {
+    customers = customers.map((c) {
+      if (c.id != customerId) return c;
+      final txs = c.transactions
+          .map((t) => t.id == txnId
+              ? Txn(id: t.id, type: type, amount: amount, label: label, date: date)
+              : t)
+          .toList();
+      return c.copyWith(transactions: txs).sorted();
+    }).toList();
+    notifyListeners();
+    await _persist();
+  }
+
+  Future<void> deleteTxn(String customerId, String txnId) async {
+    customers = customers.map((c) {
+      if (c.id != customerId) return c;
+      return c.copyWith(
+          transactions:
+              c.transactions.where((t) => t.id != txnId).toList());
+    }).toList();
+    notifyListeners();
+    await _persist();
+  }
+
   Future<void> _addTxn(String customerId, Txn tx) async {
     customers = customers
         .map((c) => c.id == customerId
@@ -222,7 +259,7 @@ class Ledger extends ChangeNotifier {
     final list = <ActivityItem>[];
     for (final c in customers) {
       for (final t in c.transactions) {
-        list.add(ActivityItem(c.name, t));
+        list.add(ActivityItem(c.id, c.name, t));
       }
     }
     list.sort((a, b) => b.txn.date.compareTo(a.txn.date));

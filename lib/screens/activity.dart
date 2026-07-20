@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../format.dart';
 import '../widgets.dart';
+import 'txn_form.dart';
 
 class ActivityScreen extends StatelessWidget {
   const ActivityScreen({super.key});
@@ -70,12 +71,17 @@ class ActivityScreen extends StatelessWidget {
             decoration: BoxDecoration(
                 border: Border(
                     bottom: BorderSide(color: Theme.of(context).dividerColor))),
-            child: txRow(context,
-                title: a.customerName,
-                subtitle: '${shortDate(a.txn.date)} · ${a.txn.label}',
-                amount: money(a.txn.amount),
-                isCredit: a.txn.isCredit,
-                boldTitle: true),
+            child: InkWell(
+              onTap: () => Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => TxnFormScreen(
+                      customerId: a.customerId, txn: a.txn))),
+              child: txRow(context,
+                  title: a.customerName,
+                  subtitle: '${shortDate(a.txn.date)} · ${a.txn.label}',
+                  amount: money(a.txn.amount),
+                  isCredit: a.txn.isCredit,
+                  boldTitle: true),
+            ),
           ),
       ],
     );

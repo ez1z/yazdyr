@@ -101,7 +101,30 @@ const Map<String, Map<String, String>> _str = {
   'addCredit': {'en': 'Add Credit', 'tk': 'Karz goşmak'},
   'recordPayment': {'en': 'Record Payment', 'tk': 'Töleg bellemek'},
   'editCustomer': {'en': 'Edit Customer', 'tk': 'Müşderini üýtget'},
+  'deleteCustomer': {'en': 'Delete Customer', 'tk': 'Müşderini poz'},
+  'deleteCustomerConfirm': {
+    'en': 'Delete {name} and all their transactions? This cannot be undone.',
+    'tk': '{name} we onuň ähli amallaryny pozmakçymy? Bu yzyna gaýtaryp bolmaýar.'
+  },
+  'cancel': {'en': 'Cancel', 'tk': 'Ýatyr'},
+  'delete': {'en': 'Delete', 'tk': 'Poz'},
+  'toastCustomerDeleted': {'en': 'Customer deleted', 'tk': 'Müşderi pozuldy'},
   'transactionHistory': {'en': 'Transaction History', 'tk': 'Amallar taryhy'},
+  'editTransaction': {'en': 'Edit Transaction', 'tk': 'Amaly üýtget'},
+  'type': {'en': 'Type', 'tk': 'Görnüşi'},
+  'toastTransactionUpdated': {
+    'en': 'Transaction updated',
+    'tk': 'Amal täzelendi'
+  },
+  'deleteTransaction': {'en': 'Delete Transaction', 'tk': 'Amaly poz'},
+  'deleteTransactionConfirm': {
+    'en': 'Delete this transaction? This cannot be undone.',
+    'tk': 'Bu amal pozulsynmy? Bu yzyna gaýtaryp bolmaýar.'
+  },
+  'toastTransactionDeleted': {
+    'en': 'Transaction deleted',
+    'tk': 'Amal pozuldy'
+  },
 
   // Customer form
   'fullName': {'en': 'Full Name *', 'tk': 'Doly ady *'},

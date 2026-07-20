@@ -56,21 +56,24 @@ class CustomersScreen extends StatelessWidget {
           ),
           const SizedBox(height: 16),
 
-          if (showEmpty)
+          if (showEmpty || list.isEmpty)
             _emptyState(context)
           else
             ...list.map((c) => _customerTile(context, c)),
 
-          const SizedBox(height: 20),
-          Center(
-            child: GestureDetector(
-              onTap: l.toggleEmptyDemo,
-              child: Text(
-                  showEmpty ? l.t('showSampleCustomers') : l.t('previewEmpty'),
-                  style: TextStyle(
-                      fontSize: 11, color: onSurface.withValues(alpha: 0.55))),
+          // Preview toggle only makes sense once real customers exist.
+          if (list.isNotEmpty) ...[
+            const SizedBox(height: 20),
+            Center(
+              child: GestureDetector(
+                onTap: l.toggleEmptyDemo,
+                child: Text(
+                    showEmpty ? l.t('showSampleCustomers') : l.t('previewEmpty'),
+                    style: TextStyle(
+                        fontSize: 11, color: onSurface.withValues(alpha: 0.55))),
+              ),
             ),
-          ),
+          ],
         ],
       ),
     );

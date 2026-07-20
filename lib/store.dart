@@ -4,7 +4,6 @@ import 'dart:io';
 import 'package:path/path.dart' as p;
 
 import 'models.dart';
-import 'seed.dart';
 
 // Container for everything persisted: the customer list plus UI prefs.
 class LedgerData {
@@ -59,9 +58,9 @@ class Store {
           jsonDecode(await f.readAsString()) as Map<String, dynamic>);
       return data;
     }
-    final seeded = LedgerData(customers: seedCustomers());
-    await save(seeded);
-    return seeded;
+    const empty = LedgerData(customers: []);
+    await save(empty);
+    return empty;
   }
 
   // Write to a temp file then rename over the target: rename is atomic on the
