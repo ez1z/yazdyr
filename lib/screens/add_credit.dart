@@ -37,7 +37,7 @@ class _AddCreditScreenState extends State<AddCreditScreen> {
         amount: _parsed!, desc: _desc.text, date: _isoOf(_date));
     if (!mounted) return;
     Navigator.of(context).pop();
-    showToast(context, 'Credit saved');
+    showToast(context, l.t('toastCreditSaved'));
   }
 
   @override
@@ -45,24 +45,25 @@ class _AddCreditScreenState extends State<AddCreditScreen> {
     final l = LedgerScope.of(context);
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Add Credit',
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600))),
+          title: Text(l.t('addCredit'),
+              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w600))),
       body: ListView(
         padding: const EdgeInsets.all(18),
         children: [
-          Text('For ${l.selected.name}',
+          Text(l.t('forCustomer').replaceFirst('{name}', l.selected.name),
               style: TextStyle(
                   fontSize: 12,
                   color:
                       Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.6))),
           const SizedBox(height: 14),
-          amountField(context, 'Amount (TMT) *', _amount),
-          labeledField(context, 'Description', _desc, hint: 'e.g. Milk, Bread'),
-          dateField(context, 'Date', _date, (d) => setState(() => _date = d)),
+          amountField(context, l.t('amountTmt'), _amount),
+          labeledField(context, l.t('description'), _desc,
+              hint: l.t('hintCreditDesc')),
+          dateField(context, l.t('date'), _date, (d) => setState(() => _date = d)),
           const SizedBox(height: 8),
           FilledButton(
               onPressed: _canSave ? _save : null,
-              child: const Text('Save Credit')),
+              child: Text(l.t('saveCredit'))),
         ],
       ),
     );

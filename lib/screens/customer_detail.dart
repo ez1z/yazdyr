@@ -37,7 +37,7 @@ class CustomerDetailScreen extends StatelessWidget {
           Center(
             child: Column(
               children: [
-                Text('CURRENT BALANCE',
+                Text(l.t('currentBalance'),
                     style: TextStyle(
                         fontSize: 11,
                         letterSpacing: 1,
@@ -60,7 +60,7 @@ class CustomerDetailScreen extends StatelessWidget {
                 onPressed: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (_) => const AddCreditScreen())),
                 icon: const Icon(Icons.add, size: 16),
-                label: const Text('Add Credit'),
+                label: Text(l.t('addCredit')),
               ),
             ),
             const SizedBox(width: 8),
@@ -69,7 +69,7 @@ class CustomerDetailScreen extends StatelessWidget {
                 onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                     builder: (_) => const RecordPaymentScreen())),
                 icon: const Icon(Icons.payments_outlined, size: 16),
-                label: const Text('Record Payment'),
+                label: Text(l.t('recordPayment')),
               ),
             ),
           ]),
@@ -78,11 +78,11 @@ class CustomerDetailScreen extends StatelessWidget {
             onPressed: () => Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => CustomerFormScreen(editId: c.id))),
             icon: const Icon(Icons.edit_outlined, size: 14),
-            label: const Text('Edit Customer'),
+            label: Text(l.t('editCustomer')),
           ),
           Divider(height: 32, color: Theme.of(context).dividerColor),
 
-          sectionHeader(context, 'Transaction History'),
+          sectionHeader(context, l.t('transactionHistory')),
           for (final t in c.transactions)
             Container(
               decoration: BoxDecoration(

@@ -10,14 +10,14 @@ class AboutScreen extends StatelessWidget {
     final l = LedgerScope.of(context);
     return Scaffold(
       appBar: AppBar(
-          title: const Text('About',
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600))),
+          title: Text(l.t('about'),
+              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w600))),
       body: ListView(
         padding: const EdgeInsets.all(18),
         children: [
           const Text('Ýazdyr',
               style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600)),
-          Text('Version 1.0.0 (MVP)',
+          Text(l.t('version'),
               style: TextStyle(
                   fontSize: 12,
                   color: Theme.of(context)
@@ -25,11 +25,9 @@ class AboutScreen extends StatelessWidget {
                       .onSurface
                       .withValues(alpha: 0.6))),
           Divider(height: 32, color: Theme.of(context).dividerColor),
-          _para(context, 'Offline-first',
-              'All data is stored on this device. Ýazdyr works fully without an internet connection — nothing is sent to a server.'),
-          _para(context, 'Storage', l.storageInfoLabel),
-          _para(context, 'Privacy',
-              'Customer records stay on your phone. Nothing is collected, tracked, or shared.'),
+          _para(context, l.t('aboutOfflineTitle'), l.t('aboutOfflineBody')),
+          _para(context, l.t('storageTitle'), l.storageInfoLabel),
+          _para(context, l.t('privacyTitle'), l.t('privacyBody')),
         ],
       ),
     );

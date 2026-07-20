@@ -7,25 +7,26 @@ class BackupScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = LedgerScope.of(context);
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Backup & Restore',
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600))),
+          title: Text(l.t('backupRestore'),
+              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w600))),
       body: ListView(
         padding: const EdgeInsets.all(18),
         children: [
-          _button(context, Icons.file_download_outlined, 'Export Database',
+          _button(context, Icons.file_download_outlined, l.t('exportDatabase'),
               _export),
           const SizedBox(height: 10),
-          _button(context, Icons.file_upload_outlined, 'Import Database',
+          _button(context, Icons.file_upload_outlined, l.t('importDatabase'),
               _restore),
           const SizedBox(height: 10),
-          _button(context, Icons.inventory_2_outlined, 'Create Backup',
+          _button(context, Icons.inventory_2_outlined, l.t('createBackup'),
               _export),
           const SizedBox(height: 10),
-          _button(context, Icons.restore, 'Restore Backup', _restore),
+          _button(context, Icons.restore, l.t('restoreBackup'), _restore),
           const SizedBox(height: 16),
-          Text('Everything works locally — no internet connection required.',
+          Text(l.t('backupLocalNote'),
               style: TextStyle(
                   fontSize: 11,
                   color: Theme.of(context)
@@ -40,15 +41,16 @@ class BackupScreen extends StatelessWidget {
   Future<void> _export(BuildContext context) async {
     final l = LedgerScope.read(context);
     final name = await l.exportBackup();
-    if (context.mounted) showToast(context, 'Backup created — $name');
+    if (context.mounted) {
+      showToast(context, l.t('toastBackupCreated').replaceFirst('{name}', name));
+    }
   }
 
   Future<void> _restore(BuildContext context) async {
     final l = LedgerScope.read(context);
     final ok = await l.restoreBackup();
     if (context.mounted) {
-      showToast(context,
-          ok ? 'Database restored from last backup' : 'No backup found yet');
+      showToast(context, ok ? l.t('toastRestored') : l.t('toastNoBackup'));
     }
   }
 

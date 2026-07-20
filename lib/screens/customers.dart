@@ -31,9 +31,9 @@ class CustomersScreen extends StatelessWidget {
 
           // Search
           TextField(
-            decoration: const InputDecoration(
-              prefixIcon: Icon(Icons.search),
-              hintText: 'Search by name or phone',
+            decoration: InputDecoration(
+              prefixIcon: const Icon(Icons.search),
+              hintText: l.t('searchHint'),
               isDense: true,
             ),
             onChanged: l.setSearchQuery,
@@ -42,10 +42,10 @@ class CustomersScreen extends StatelessWidget {
 
           // Sort
           SegmentedButton<String>(
-            segments: const [
-              ButtonSegment(value: 'alpha', label: Text('A–Z')),
-              ButtonSegment(value: 'debt', label: Text('Highest debt')),
-              ButtonSegment(value: 'recent', label: Text('Recent')),
+            segments: [
+              const ButtonSegment(value: 'alpha', label: Text('A–Z')),
+              ButtonSegment(value: 'debt', label: Text(l.t('sortHighestDebt'))),
+              ButtonSegment(value: 'recent', label: Text(l.t('sortRecent'))),
             ],
             selected: {l.sortMode},
             showSelectedIcon: false,
@@ -66,7 +66,7 @@ class CustomersScreen extends StatelessWidget {
             child: GestureDetector(
               onTap: l.toggleEmptyDemo,
               child: Text(
-                  showEmpty ? 'Show sample customers' : 'Preview empty state',
+                  showEmpty ? l.t('showSampleCustomers') : l.t('previewEmpty'),
                   style: TextStyle(
                       fontSize: 11, color: onSurface.withValues(alpha: 0.55))),
             ),
@@ -127,6 +127,7 @@ class CustomersScreen extends StatelessWidget {
   }
 
   Widget _emptyState(BuildContext context) {
+    final l = LedgerScope.of(context);
     final onSurface = Theme.of(context).colorScheme.onSurface;
     return Padding(
       padding: const EdgeInsets.symmetric(vertical: 60, horizontal: 20),
@@ -135,10 +136,10 @@ class CustomersScreen extends StatelessWidget {
           Icon(Icons.people_outline,
               size: 40, color: onSurface.withValues(alpha: 0.3)),
           const SizedBox(height: 10),
-          const Text('No customers yet',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
+          Text(l.t('noCustomers'),
+              style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),
           const SizedBox(height: 6),
-          Text('Add your first customer to start tracking credit.',
+          Text(l.t('addFirstCustomer'),
               textAlign: TextAlign.center,
               style:
                   TextStyle(fontSize: 12, color: onSurface.withValues(alpha: 0.6))),
@@ -146,7 +147,7 @@ class CustomersScreen extends StatelessWidget {
           FilledButton(
             onPressed: () => Navigator.of(context).push(
                 MaterialPageRoute(builder: (_) => const CustomerFormScreen())),
-            child: const Text('Add Customer'),
+            child: Text(l.t('addCustomer')),
           ),
         ],
       ),

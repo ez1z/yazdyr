@@ -11,21 +11,21 @@ class ReportsScreen extends StatelessWidget {
     final l = LedgerScope.of(context);
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Reports',
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600))),
+          title: Text(l.t('reports'),
+              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w600))),
       body: ListView(
         padding: const EdgeInsets.all(18),
         children: [
           statCard(context,
-              kicker: 'Total Credit Given',
+              kicker: l.t('totalCreditGiven'),
               value: money(l.totalCreditGiven)),
           const SizedBox(height: 10),
           statCard(context,
-              kicker: 'Total Payments Received',
+              kicker: l.t('totalPaymentsReceived'),
               value: money(l.totalPaymentsReceived)),
           const SizedBox(height: 10),
           statCard(context,
-              kicker: 'Outstanding Balance',
+              kicker: l.t('outstandingBalance'),
               value: money(l.totalOutstanding),
               accent: true),
         ],

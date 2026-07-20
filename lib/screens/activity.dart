@@ -20,11 +20,11 @@ class ActivityScreen extends StatelessWidget {
 
         // Period
         _seg(context,
-            segments: const {
-              'today': 'Today',
-              'week': 'Week',
-              'month': 'Month',
-              'custom': 'Custom',
+            segments: {
+              'today': l.t('periodToday'),
+              'week': l.t('periodWeek'),
+              'month': l.t('periodMonth'),
+              'custom': l.t('periodCustom'),
             },
             selected: l.activityFilter,
             onChanged: l.setActivityFilter),
@@ -35,15 +35,15 @@ class ActivityScreen extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             _seg(context,
-                segments: const {
-                  'all': 'All',
-                  'credit': 'Credit',
-                  'payment': 'Payment'
+                segments: {
+                  'all': l.t('typeAll'),
+                  'credit': l.t('typeCredit'),
+                  'payment': l.t('typePayment')
                 },
                 selected: l.activityTypeFilter,
                 onChanged: l.setActivityType),
             _seg(context,
-                segments: const {'newest': 'Newest', 'amount': 'Amount'},
+                segments: {'newest': l.t('sortNewest'), 'amount': l.t('sortAmount')},
                 selected: l.activitySort,
                 onChanged: l.setActivitySort),
           ],
@@ -53,13 +53,14 @@ class ActivityScreen extends StatelessWidget {
           const SizedBox(height: 10),
           Row(children: [
             Expanded(
-                child: _customDate(context, l.customStartDate, 'From',
+                child: _customDate(context, l.customStartDate, l.t('dateFrom'),
                     l.setCustomStart)),
-            const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 8), child: Text('to')),
+            Padding(
+                padding: const EdgeInsets.symmetric(horizontal: 8),
+                child: Text(l.t('dateSep'))),
             Expanded(
                 child: _customDate(
-                    context, l.customEndDate, 'To', l.setCustomEnd)),
+                    context, l.customEndDate, l.t('dateTo'), l.setCustomEnd)),
           ]),
         ],
         const SizedBox(height: 10),

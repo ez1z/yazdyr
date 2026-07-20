@@ -40,7 +40,7 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
             '${_date.year}-${_date.month.toString().padLeft(2, '0')}-${_date.day.toString().padLeft(2, '0')}');
     if (!mounted) return;
     Navigator.of(context).pop();
-    showToast(context, 'Payment recorded');
+    showToast(context, l.t('toastPaymentRecorded'));
   }
 
   @override
@@ -48,12 +48,12 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
     final l = LedgerScope.of(context);
     return Scaffold(
       appBar: AppBar(
-          title: const Text('Record Payment',
-              style: TextStyle(fontSize: 19, fontWeight: FontWeight.w600))),
+          title: Text(l.t('recordPayment'),
+              style: const TextStyle(fontSize: 19, fontWeight: FontWeight.w600))),
       body: ListView(
         padding: const EdgeInsets.all(18),
         children: [
-          Text('For ${l.selected.name}',
+          Text(l.t('forCustomer').replaceFirst('{name}', l.selected.name),
               style: TextStyle(
                   fontSize: 12,
                   color: Theme.of(context)
@@ -61,14 +61,14 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
                       .onSurface
                       .withValues(alpha: 0.6))),
           const SizedBox(height: 14),
-          amountField(context, 'Amount (TMT) *', _amount),
-          dateField(context, 'Date', _date, (d) => setState(() => _date = d)),
-          labeledField(context, 'Notes', _notes,
-              hint: 'Optional notes', lines: 3),
+          amountField(context, l.t('amountTmt'), _amount),
+          dateField(context, l.t('date'), _date, (d) => setState(() => _date = d)),
+          labeledField(context, l.t('notes'), _notes,
+              hint: l.t('hintNotes'), lines: 3),
           const SizedBox(height: 8),
           FilledButton(
               onPressed: _canSave ? _save : null,
-              child: const Text('Save Payment')),
+              child: Text(l.t('savePayment'))),
         ],
       ),
     );

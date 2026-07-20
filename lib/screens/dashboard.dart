@@ -33,46 +33,46 @@ class DashboardScreen extends StatelessWidget {
         Row(children: [
           Expanded(
               child: statCard(context,
-                  kicker: 'Total Customers',
+                  kicker: l.t('statTotalCustomers'),
                   value: '${l.totalCustomers}',
                   valueSize: 28)),
           const SizedBox(width: 10),
           Expanded(
               child: statCard(context,
-                  kicker: 'Outstanding Debt',
+                  kicker: l.t('statOutstandingDebt'),
                   value: money(l.totalOutstanding),
                   accent: true,
                   valueSize: 22)),
         ]),
         const SizedBox(height: 10),
         statCard(context,
-            kicker: "Today's Credit Sales",
+            kicker: l.t('statTodayCredit'),
             value: money(l.todayCredit),
             valueSize: 24),
         const SizedBox(height: 22),
 
         // Quick actions
-        sectionHeader(context, 'Quick Actions'),
+        sectionHeader(context, l.t('quickActions')),
         Row(children: [
           _quickAction(context, Icons.add, l.t('addCustomer'), () {
             Navigator.of(context).push(MaterialPageRoute(
                 builder: (_) => const CustomerFormScreen()));
           }),
           const SizedBox(width: 8),
-          _quickAction(context, Icons.credit_card, 'New Credit', () {
+          _quickAction(context, Icons.credit_card, l.t('newCredit'), () {
             switchToTab(context, 1);
-            showToast(context, 'Select a customer to add a credit entry');
+            showToast(context, l.t('selectCustomerCredit'));
           }),
           const SizedBox(width: 8),
-          _quickAction(context, Icons.payments_outlined, 'Record Payment', () {
+          _quickAction(context, Icons.payments_outlined, l.t('recordPayment'), () {
             switchToTab(context, 1);
-            showToast(context, 'Select a customer to record a payment');
+            showToast(context, l.t('selectCustomerPayment'));
           }),
         ]),
         const SizedBox(height: 26),
 
         // Highest debt
-        sectionHeader(context, 'Highest Debt'),
+        sectionHeader(context, l.t('highestDebt')),
         boxList(context, [
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
@@ -95,7 +95,7 @@ class DashboardScreen extends StatelessWidget {
         const SizedBox(height: 26),
 
         // Longest without payment
-        sectionHeader(context, 'Longest Without Payment'),
+        sectionHeader(context, l.t('longestWithoutPayment')),
         boxList(context, [
           for (final o in overdue)
             _divRow(context,
@@ -104,10 +104,10 @@ class DashboardScreen extends StatelessWidget {
         const SizedBox(height: 26),
 
         // Recent activity
-        sectionHeader(context, 'Recent Activity',
+        sectionHeader(context, l.t('recentActivity'),
             trailing: GestureDetector(
                 onTap: () => switchToTab(context, 2),
-                child: Text('See all',
+                child: Text(l.t('seeAll'),
                     style: TextStyle(
                         fontSize: 12,
                         color: Theme.of(context).colorScheme.primary)))),

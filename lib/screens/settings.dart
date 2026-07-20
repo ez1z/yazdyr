@@ -19,7 +19,7 @@ class SettingsScreen extends StatelessWidget {
         const SizedBox(height: 16),
         _row(
           context,
-          'Language',
+          l.t('language'),
           trailing: SegmentedButton<String>(
             segments: const [
               ButtonSegment(value: 'en', label: Text('EN')),
@@ -33,11 +33,11 @@ class SettingsScreen extends StatelessWidget {
         ),
         _row(
           context,
-          'Theme',
+          l.t('theme'),
           trailing: SegmentedButton<String>(
-            segments: const [
-              ButtonSegment(value: 'light', label: Text('Light')),
-              ButtonSegment(value: 'dark', label: Text('Dark')),
+            segments: [
+              ButtonSegment(value: 'light', label: Text(l.t('themeLight'))),
+              ButtonSegment(value: 'dark', label: Text(l.t('themeDark'))),
             ],
             selected: {l.theme},
             showSelectedIcon: false,
@@ -45,9 +45,9 @@ class SettingsScreen extends StatelessWidget {
             style: const ButtonStyle(visualDensity: VisualDensity.compact),
           ),
         ),
-        _link(context, 'Backup & Restore', const BackupScreen()),
-        _link(context, 'Reports', const ReportsScreen()),
-        _link(context, 'About', const AboutScreen()),
+        _link(context, l.t('backupRestore'), const BackupScreen()),
+        _link(context, l.t('reports'), const ReportsScreen()),
+        _link(context, l.t('about'), const AboutScreen()),
       ],
     );
   }

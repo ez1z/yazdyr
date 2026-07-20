@@ -60,28 +60,30 @@ class _CustomerFormScreenState extends State<CustomerFormScreen> {
     }
     if (!mounted) return;
     Navigator.of(context).pop();
-    showToast(context, _isEdit ? 'Customer updated' : 'Customer added');
+    showToast(context,
+        _isEdit ? l.t('toastCustomerUpdated') : l.t('toastCustomerAdded'));
   }
 
   @override
   Widget build(BuildContext context) {
+    final l = LedgerScope.of(context);
     final canSave = _name.text.trim().isNotEmpty;
     return Scaffold(
       appBar: AppBar(
-          title: Text(_isEdit ? 'Edit Customer' : 'Add Customer',
+          title: Text(_isEdit ? l.t('editCustomer') : l.t('addCustomer'),
               style:
                   const TextStyle(fontSize: 19, fontWeight: FontWeight.w600))),
       body: ListView(
         padding: const EdgeInsets.all(18),
         children: [
-          _field('Full Name *', _name, hint: 'e.g. Aýgül Berdiýewa'),
-          _field('Phone Number', _phone, hint: '+993 6X XXXXXX'),
-          _field('Address', _address, hint: 'Neighborhood, city'),
-          _field('Notes', _notes, hint: 'Optional notes', lines: 3),
+          _field(l.t('fullName'), _name, hint: l.t('hintFullName')),
+          _field(l.t('phoneNumber'), _phone, hint: '+993 6X XXXXXX'),
+          _field(l.t('address'), _address, hint: l.t('hintAddress')),
+          _field(l.t('notes'), _notes, hint: l.t('hintNotes'), lines: 3),
           const SizedBox(height: 8),
           FilledButton(
             onPressed: canSave ? _save : null,
-            child: Text(_isEdit ? 'Save Changes' : 'Save Customer'),
+            child: Text(_isEdit ? l.t('saveChanges') : l.t('saveCustomer')),
           ),
         ],
       ),

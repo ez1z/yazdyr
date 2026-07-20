@@ -13,6 +13,7 @@ class SplashScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final l = LedgerScope.of(context);
     return Scaffold(
       body: Center(
         child: Column(
@@ -21,7 +22,7 @@ class SplashScreen extends StatelessWidget {
             const Text('Ýazdyr',
                 style: TextStyle(fontSize: 40, fontWeight: FontWeight.w800)),
             const SizedBox(height: 14),
-            Text('Offline-first credit ledger for small shops',
+            Text(l.t('splashTagline'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                     fontSize: 14,
@@ -32,7 +33,7 @@ class SplashScreen extends StatelessWidget {
             const SizedBox(height: 22),
             const _PulsingDots(),
             const SizedBox(height: 14),
-            Text('LOADING LOCAL DATABASE…',
+            Text(l.t('loadingDb'),
                 style: TextStyle(
                     fontSize: 11,
                     letterSpacing: 1,

@@ -240,7 +240,7 @@ class Ledger extends ChangeNotifier {
 
   String get highestDebtLabel {
     final withDebt = customers.where((c) => c.balance > 0).toList();
-    if (withDebt.isEmpty) return 'No debts';
+    if (withDebt.isEmpty) return t('noDebts');
     withDebt.sort((a, b) => b.balance.compareTo(a.balance));
     return money(withDebt.first.balance);
   }
@@ -263,8 +263,8 @@ class Ledger extends ChangeNotifier {
     });
     return items.take(5).map((e) {
       final sub = e.lastPaid != null
-          ? 'Last paid ${shortDate(e.lastPaid)}'
-          : 'No payment recorded';
+          ? t('lastPaid').replaceFirst('{date}', shortDate(e.lastPaid))
+          : t('noPaymentRecorded');
       return OverdueItem(e.c.name, sub, e.c.balance);
     }).toList();
   }
@@ -332,6 +332,9 @@ class Ledger extends ChangeNotifier {
   String get storageInfoLabel {
     final txCount = _allTx.length;
     final mb = (0.4 + txCount * 0.02).toStringAsFixed(1);
-    return '$totalCustomers customers · $txCount transactions · ~$mb MB';
+    return t('storageInfo')
+        .replaceFirst('{c}', '$totalCustomers')
+        .replaceFirst('{t}', '$txCount')
+        .replaceFirst('{mb}', mb);
   }
 }
