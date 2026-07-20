@@ -8,26 +8,58 @@ permissions:
   contents: write
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          cache: true
+      - run: flutter pub get
+      - run: flutter analyze
+      - run: flutter test
+
+  release:
+    needs: test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          fetch-tags: true
+
+      - name: Read version
+        id: version
+        run: |
+          v=$(grep '^version:' pubspec.yaml | sed 's/version: *//; s/+.*//')
+          echo "tag=v$v" >> "$GITHUB_OUTPUT"
+          if git rev-parse "v$v" >/dev/null 2>&1; then
+            echo "exists=true" >> "$GITHUB_OUTPUT"
+          else
+            echo "exists=false" >> "$GITHUB_OUTPUT"
+          fi
 
       - uses: actions/setup-java@v4
+        if: steps.version.outputs.exists == 'false'
         with:
           distribution: temurin
           java-version: '17'
 
       - uses: subosito/flutter-action@v2
+        if: steps.version.outputs.exists == 'false'
         with:
           channel: stable
           cache: true
 
-      - run: flutter pub get
-      - run: flutter build apk --release
+      - if: steps.version.outputs.exists == 'false'
+        run: flutter pub get
+      - if: steps.version.outputs.exists == 'false'
+        run: flutter build apk --release
 
       - name: Release
+        if: steps.version.outputs.exists == 'false'
         uses: softprops/action-gh-release@v2
         with:
-          tag_name: v${{ github.run_number }}
+          tag_name: ${{ steps.version.outputs.tag }}
           files: build/app/outputs/flutter-apk/app-release.apk
