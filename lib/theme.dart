@@ -19,7 +19,8 @@ ThemeData _build({
   required Color accent,
 }) {
   final divider = text.withValues(alpha: 0.12);
-  final base = ThemeData(brightness: brightness, useMaterial3: true);
+  final base = ThemeData(
+      brightness: brightness, useMaterial3: true, fontFamily: 'Comfortaa');
   return base.copyWith(
     scaffoldBackgroundColor: bg,
     colorScheme: ColorScheme.fromSeed(
@@ -61,7 +62,7 @@ ThemeData _build({
       backgroundColor: bg,
       indicatorColor: accent.withValues(alpha: 0.16),
       labelTextStyle: WidgetStatePropertyAll(
-        TextStyle(fontSize: 10, color: text),
+        TextStyle(fontSize: 12, fontWeight: FontWeight.w600, color: text),
       ),
     ),
   );

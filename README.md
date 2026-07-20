@@ -9,8 +9,7 @@ Flutter Android app. Everything runs on-device: no server, no account, no intern
 - **Customers** — searchable (name/phone) and sortable (A–Z / debt / recent) list, add/edit, running balance + history per customer.
 - **Activity** — feed filtered by period (today/week/month/custom), type (credit/payment), and sort (newest/amount).
 - **Reports** — credit given, payments received, outstanding balance.
-- **Backup & Restore** — export/restore the ledger as a JSON file.
-- **Settings** — language (EN/TK, partial) and light/dark theme, both persisted.
+- **Settings** — language (EN/TK/RU) and light/dark theme, both persisted.
 
 ## Run
 
@@ -42,7 +41,7 @@ UI (screens/) ──reads──▶ Ledger getters (computed)
 
 **Persistence** (`lib/store.dart`) is a JSON key-value store (`ledger.json`). It's an
 intentional seam: swap it for a `sqflite` implementation behind the same
-`load` / `save` / `exportTo` / `importLatest` surface and nothing else changes. (SQLite was
+`load` / `save` surface and nothing else changes. (SQLite was
 the intended backend but was unreachable in the offline build environment.)
 
 ### File map
@@ -51,7 +50,7 @@ the intended backend but was unreachable in the offline build environment.)
 |------|------|
 | `lib/models.dart` | `Customer` / `Txn`, balance math |
 | `lib/ledger.dart` | `Ledger` — state, mutations, `renderVals`-style computed getters |
-| `lib/store.dart` | JSON persistence + export/import |
+| `lib/store.dart` | JSON persistence |
 | `lib/seed.dart` | sample customers, seeded on first launch only |
 | `lib/format.dart` | money/date formatting, EN/TK strings (`tr`) |
 | `lib/theme.dart` | light/dark themes from the prototype design tokens |

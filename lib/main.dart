@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -32,14 +30,7 @@ class _YazdyrAppState extends State<YazdyrApp> {
 
   Future<void> _bootstrap() async {
     final docs = await getApplicationDocumentsDirectory();
-    Directory exportDir = docs;
-    try {
-      final ext = await getExternalStorageDirectory();
-      if (ext != null) exportDir = ext;
-    } catch (_) {
-      // Non-Android platforms: fall back to the documents dir for exports.
-    }
-    final ledger = Ledger(Store(docs, exportDir: exportDir));
+    final ledger = Ledger(Store(docs));
     await ledger.init();
     if (mounted) setState(() => _ledger = ledger);
   }
@@ -66,6 +57,12 @@ class _YazdyrAppState extends State<YazdyrApp> {
             theme: lightTheme,
             darkTheme: darkTheme,
             themeMode: l.theme == 'dark' ? ThemeMode.dark : ThemeMode.light,
+            // Raise the text-size floor ~15% for readability while still
+            // honoring users who set an even larger system font scale.
+            builder: (context, child) => MediaQuery.withClampedTextScaling(
+              minScaleFactor: 1.15,
+              child: child!,
+            ),
             home: const HomeShell(),
           );
         },

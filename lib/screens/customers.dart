@@ -137,7 +137,7 @@ class CustomersScreen extends StatelessWidget {
       child: Column(
         children: [
           Icon(Icons.people_outline,
-              size: 40, color: onSurface.withValues(alpha: 0.3)),
+              size: 48, color: onSurface.withValues(alpha: 0.3)),
           const SizedBox(height: 10),
           Text(l.t('noCustomers'),
               style: const TextStyle(fontSize: 18, fontWeight: FontWeight.w600)),

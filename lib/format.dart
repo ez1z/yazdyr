@@ -181,31 +181,8 @@ const Map<String, Map<String, String>> _str = {
   'theme': {'en': 'Theme', 'tk': 'Tema', 'ru': 'Тема'},
   'themeLight': {'en': 'Light', 'tk': 'Açyk', 'ru': 'Светлая'},
   'themeDark': {'en': 'Dark', 'tk': 'Garaňky', 'ru': 'Тёмная'},
-  'backupRestore': {'en': 'Backup & Restore', 'tk': 'Ätiýaçlyk we dikeltme', 'ru': 'Резервная копия'},
   'reports': {'en': 'Reports', 'tk': 'Hasabatlar', 'ru': 'Отчёты'},
   'about': {'en': 'About', 'tk': 'Barada', 'ru': 'О приложении'},
-
-  // Backup
-  'exportDatabase': {'en': 'Export Database', 'tk': 'Maglumat bazasyny çykar', 'ru': 'Экспорт базы данных'},
-  'importDatabase': {'en': 'Import Database', 'tk': 'Maglumat bazasyny getir', 'ru': 'Импорт базы данных'},
-  'createBackup': {'en': 'Create Backup', 'tk': 'Ätiýaçlyk döret', 'ru': 'Создать копию'},
-  'restoreBackup': {'en': 'Restore Backup', 'tk': 'Ätiýaçlygy dikelt', 'ru': 'Восстановить копию'},
-  'backupLocalNote': {
-    'en': 'Everything works locally — no internet connection required.',
-    'tk': 'Ählisi internetsiz işleýär.',
-    'ru': 'Всё работает локально — интернет не требуется.'
-  },
-  'toastBackupCreated': {
-    'en': 'Backup created — {name}',
-    'tk': 'Ätiýaçlyk döredildi — {name}',
-    'ru': 'Копия создана — {name}'
-  },
-  'toastRestored': {
-    'en': 'Database restored from last backup',
-    'tk': 'Maglumat bazasy soňky ätiýaçlykdan dikeldildi',
-    'ru': 'База восстановлена из последней копии'
-  },
-  'toastNoBackup': {'en': 'No backup found yet', 'tk': 'Entek ätiýaçlyk tapylmady', 'ru': 'Копия пока не найдена'},
 
   // Reports
   'totalCreditGiven': {'en': 'Total Credit Given', 'tk': 'Berlen jemi karz', 'ru': 'Всего выдано в долг'},

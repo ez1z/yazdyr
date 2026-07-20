@@ -34,19 +34,17 @@ class LedgerData {
   }
 }
 
-// JSON-file persistence. One file (`ledger.json`) under [dataDir]; exports go
-// to [exportDir]. `dataDir`/`exportDir` are injected so this class stays free of
-// path_provider and is testable headless with a temp dir.
+// JSON-file persistence. One file (`ledger.json`) under [dataDir]. `dataDir` is
+// injected so this class stays free of path_provider and is testable headless
+// with a temp dir.
 //
 // ponytail: JSON blob is plenty for hundreds of records. Swap this class for a
-// sqflite-backed store (same load/save/export/import surface) if the ledger ever
-// grows to thousands of rows or needs partial queries — the rest of the app only
-// touches LedgerData, not the storage format.
+// sqflite-backed store (same load/save surface) if the ledger ever grows to
+// thousands of rows or needs partial queries — the rest of the app only touches
+// LedgerData, not the storage format.
 class Store {
   final Directory dataDir;
-  final Directory exportDir;
-  Store(this.dataDir, {Directory? exportDir})
-      : exportDir = exportDir ?? dataDir;
+  Store(this.dataDir);
 
   File get _file => File(p.join(dataDir.path, 'ledger.json'));
 
@@ -72,39 +70,4 @@ class Store {
     await tmp.writeAsString(jsonEncode(data.toJson()), flush: true);
     await tmp.rename(_file.path);
   }
-
-  // Export/backup: write a timestamped copy to external storage. Returns the
-  // filename shown in the confirmation toast.
-  Future<String> exportTo(LedgerData data) async {
-    if (!await exportDir.exists()) await exportDir.create(recursive: true);
-    final name = 'yazdyr-export-${todayStamp()}.json';
-    await File(p.join(exportDir.path, name))
-        .writeAsString(jsonEncode(data.toJson()));
-    return name;
-  }
-
-  // Import/restore: read the most recent yazdyr-*.json from the export dir.
-  // (No file_picker offline — restoring the latest backup is the offline path.)
-  Future<LedgerData?> importLatest() async {
-    if (!await exportDir.exists()) return null;
-    final files = exportDir
-        .listSync()
-        .whereType<File>()
-        .where((f) => p.basename(f.path).startsWith('yazdyr-') &&
-            f.path.endsWith('.json'))
-        .toList()
-      ..sort((a, b) => b.path.compareTo(a.path));
-    if (files.isEmpty) return null;
-    final data = LedgerData.fromJson(
-        jsonDecode(await files.first.readAsString()) as Map<String, dynamic>);
-    await save(data);
-    return data;
-  }
-}
-
-String todayStamp() {
-  final d = DateTime.now();
-  final m = d.month.toString().padLeft(2, '0');
-  final day = d.day.toString().padLeft(2, '0');
-  return '${d.year}-$m-$day';
 }

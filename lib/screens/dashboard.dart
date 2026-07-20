@@ -11,6 +11,7 @@ class DashboardScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final l = LedgerScope.of(context);
+    final highestDebt = l.highestDebtList;
     final overdue = l.overdueList;
     final recent = l.recentActivity;
 
@@ -71,26 +72,15 @@ class DashboardScreen extends StatelessWidget {
         ]),
         const SizedBox(height: 26),
 
-        // Highest debt
+        // Highest debt — top 3
         sectionHeader(context, l.t('highestDebt')),
         boxList(context, [
-          Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: [
-                Flexible(
-                    child: Text(l.highestDebtName,
-                        maxLines: 1, overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(fontSize: 13))),
-                Text(l.highestDebtLabel,
-                    style: TextStyle(
-                        fontSize: 13,
-                        color: Theme.of(context).colorScheme.primary,
-                        fontFeatures: const [FontFeature.tabularFigures()])),
-              ],
-            ),
-          ),
+          if (highestDebt.isEmpty)
+            _emptyRow(context, l.t('noDebts'))
+          else
+            for (final d in highestDebt)
+              _divRow(context,
+                  title: d.name, subtitle: d.subLabel, amount: money(d.balance)),
         ]),
         const SizedBox(height: 26),
 
@@ -127,28 +117,38 @@ class DashboardScreen extends StatelessWidget {
       BuildContext context, IconData icon, String label, VoidCallback onTap) {
     return Expanded(
       child: SizedBox(
-        height: 66,
+        height: 84,
         child: FilledButton.tonal(
           onPressed: onTap,
           style: FilledButton.styleFrom(
-            padding: const EdgeInsets.all(4),
+            padding: const EdgeInsets.all(6),
             shape:
                 RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
           ),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              Icon(icon, size: 16),
+              Icon(icon, size: 22),
               const SizedBox(height: 6),
               Text(label,
                   textAlign: TextAlign.center,
                   maxLines: 2,
                   style: const TextStyle(
-                      fontSize: 10.5, fontWeight: FontWeight.w700)),
+                      fontSize: 12, fontWeight: FontWeight.w700)),
             ],
           ),
         ),
       ),
+    );
+  }
+
+  Widget _emptyRow(BuildContext context, String text) {
+    return Padding(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+      child: Text(text,
+          style: TextStyle(
+              fontSize: 13,
+              color: Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.55))),
     );
   }
 

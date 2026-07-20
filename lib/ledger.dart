@@ -223,20 +223,6 @@ class Ledger extends ChangeNotifier {
             date: date ?? todayIso()));
   }
 
-  // ---- backup / restore ----
-  Future<String> exportBackup() =>
-      store.exportTo(LedgerData(customers: customers, theme: theme, language: language));
-
-  Future<bool> restoreBackup() async {
-    final data = await store.importLatest();
-    if (data == null) return false;
-    customers = data.customers;
-    theme = data.theme;
-    language = data.language;
-    notifyListeners();
-    return true;
-  }
-
   // ---- computed (renderVals) ----
   int get totalCustomers => customers.length;
 
@@ -268,18 +254,15 @@ class Ledger extends ChangeNotifier {
 
   List<ActivityItem> get recentActivity => _allTx.take(5).toList();
 
-  String get highestDebtName {
-    final withDebt = customers.where((c) => c.balance > 0).toList();
-    if (withDebt.isEmpty) return '—';
-    withDebt.sort((a, b) => b.balance.compareTo(a.balance));
-    return withDebt.first.name;
-  }
-
-  String get highestDebtLabel {
-    final withDebt = customers.where((c) => c.balance > 0).toList();
-    if (withDebt.isEmpty) return t('noDebts');
-    withDebt.sort((a, b) => b.balance.compareTo(a.balance));
-    return money(withDebt.first.balance);
+  // Top 3 customers by outstanding balance (highest first), as a list to
+  // mirror the "Longest Without Payment" section on the dashboard.
+  List<OverdueItem> get highestDebtList {
+    final withDebt = customers.where((c) => c.balance > 0).toList()
+      ..sort((a, b) => b.balance.compareTo(a.balance));
+    return withDebt.take(3).map((c) {
+      final sub = c.phone.isNotEmpty ? c.phone : shortDate(c.lastDate);
+      return OverdueItem(c.name, sub, c.balance);
+    }).toList();
   }
 
   String? _lastPaymentDate(Customer c) {
