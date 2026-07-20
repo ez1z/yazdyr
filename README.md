@@ -46,16 +46,16 @@ the intended backend but was unreachable in the offline build environment.)
 
 ### File map
 
-| Path | Role |
-|------|------|
-| `lib/models.dart` | `Customer` / `Txn`, balance math |
-| `lib/ledger.dart` | `Ledger` — state, mutations, `renderVals`-style computed getters |
-| `lib/store.dart` | JSON persistence |
-| `lib/seed.dart` | sample customers, seeded on first launch only |
-| `lib/format.dart` | money/date formatting, EN/TK strings (`tr`) |
-| `lib/theme.dart` | light/dark themes from the prototype design tokens |
-| `lib/widgets.dart` | `LedgerScope` + shared UI pieces |
-| `lib/screens/` | one screen per prototype view |
+| Path               | Role                                                             |
+| ------------------ | ---------------------------------------------------------------- |
+| `lib/models.dart`  | `Customer` / `Txn`, balance math                                 |
+| `lib/ledger.dart`  | `Ledger` — state, mutations, `renderVals`-style computed getters |
+| `lib/store.dart`   | JSON persistence                                                 |
+| `lib/seed.dart`    | sample customers, seeded on first launch only                    |
+| `lib/format.dart`  | money/date formatting, EN/TK strings (`tr`)                      |
+| `lib/theme.dart`   | light/dark themes from the prototype design tokens               |
+| `lib/widgets.dart` | `LedgerScope` + shared UI pieces                                 |
+| `lib/screens/`     | one screen per prototype view                                    |
 
 The app is ported from the Claude Design prototype `Yazdyr Prototype.dc.html` — its
 `renderVals()` / `computeCustomer` are the behavioral spec, mirrored in `ledger.dart`.
@@ -79,3 +79,5 @@ picker for restore, or add per-customer transaction editing/deletion.
 
 > Or just fork this, copy the README verbatim, and hand it to the AI whose output
 > you'll never actually read or understand. We won't tell.
+
+This project created after I waited half an hour in queue till the cashier find the ledger written page of the current customer.
