@@ -26,6 +26,32 @@ String shortDate(String? iso) {
   return '${_months[d.month - 1]} ${d.day}';
 }
 
+// Full month names per language (Russian in genitive, as used with a day number).
+const _monthsLong = {
+  'en': [
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December',
+  ],
+  'tk': [
+    'Ýanwar', 'Fewral', 'Mart', 'Aprel', 'Maý', 'Iýun',
+    'Iýul', 'Awgust', 'Sentýabr', 'Oktýabr', 'Noýabr', 'Dekabr',
+  ],
+  'ru': [
+    'января', 'февраля', 'марта', 'апреля', 'мая', 'июня',
+    'июля', 'августа', 'сентября', 'октября', 'ноября', 'декабря',
+  ],
+};
+
+// Localized date + 24h time: '2026-07-22T14:30:…' → '22 Iýul, 14:30' (tk).
+String localDateTime(String iso, String lang) {
+  final d = DateTime.tryParse(iso);
+  if (d == null) return '';
+  final months = _monthsLong[lang] ?? _monthsLong['en']!;
+  final hh = d.hour.toString().padLeft(2, '0');
+  final mm = d.minute.toString().padLeft(2, '0');
+  return '${d.day} ${months[d.month - 1]}, $hh:$mm';
+}
+
 // Today as ISO 'yyyy-MM-dd' (prototype used a fixed TODAY; real app uses now).
 String todayIso() {
   final d = DateTime.now();
@@ -117,22 +143,17 @@ const Map<String, Map<String, String>> _str = {
   },
   'cancel': {'en': 'Cancel', 'tk': 'Ýatyr', 'ru': 'Отмена'},
   'delete': {'en': 'Delete', 'tk': 'Poz', 'ru': 'Удалить'},
-  // Send-SMS feature
-  'sendSms': {'en': 'Send SMS', 'tk': 'SMS ýollamak', 'ru': 'Отправить SMS'},
-  'send': {'en': 'Send', 'tk': 'Ýolla', 'ru': 'Отправить'},
-  'autoSendSms': {
-    'en': 'Auto-send SMS', 'tk': 'SMS awto-ýollamak', 'ru': 'Авто-отправка SMS'
+  // SMS receipt sent to the customer after recording a credit/payment.
+  'smsCreditMsg': {
+    'en': 'Hello {name}. Credit added: {amount} ({date}). Balance due: {balance}.',
+    'tk': 'Salam {name}. Karz ýazyldy: {amount} ({date}). Galan bergi: {balance}.',
+    'ru': 'Здравствуйте, {name}. Долг: {amount} ({date}). Остаток: {balance}.'
   },
-  'toastSmsSent': {'en': 'SMS sent', 'tk': 'SMS ýollandy', 'ru': 'SMS отправлено'},
-  'smsIncludeBalance': {
-    'en': 'Include balance', 'tk': 'Balansy goş', 'ru': 'Включить баланс'
+  'smsPaymentMsg': {
+    'en': 'Hello {name}. Payment received: {amount} ({date}). Balance due: {balance}.',
+    'tk': 'Salam {name}. Töleg kabul edildi: {amount} ({date}). Galan bergi: {balance}.',
+    'ru': 'Здравствуйте, {name}. Оплата: {amount} ({date}). Остаток: {balance}.'
   },
-  'smsIncludeTransactions': {
-    'en': 'Include transactions', 'tk': 'Amallary goş', 'ru': 'Включить операции'
-  },
-  'smsGreeting': {'en': 'Hello', 'tk': 'Salam', 'ru': 'Здравствуйте'},
-  'smsBalanceLabel': {'en': 'Balance', 'tk': 'Galan bergi', 'ru': 'Остаток'},
-  'smsPaymentWord': {'en': 'payment', 'tk': 'töleg', 'ru': 'оплата'},
   'toastCustomerDeleted': {'en': 'Customer deleted', 'tk': 'Müşderi pozuldy', 'ru': 'Клиент удалён'},
   'transactionHistory': {'en': 'Transaction History', 'tk': 'Amallar taryhy', 'ru': 'История операций'},
   'editTransaction': {'en': 'Edit Transaction', 'tk': 'Amaly üýtget', 'ru': 'Изменить операцию'},

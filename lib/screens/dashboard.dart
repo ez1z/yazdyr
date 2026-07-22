@@ -105,7 +105,8 @@ class DashboardScreen extends StatelessWidget {
           for (final a in recent)
             txRow(context,
                 title: a.customerName,
-                subtitle: '${shortDate(a.txn.date)} · ${a.txn.label}',
+                subtitle:
+                    '${localDateTime(a.txn.createdAt, l.language)} · ${a.txn.label}',
                 amount: money(a.txn.amount),
                 isCredit: a.txn.isCredit),
         ]),

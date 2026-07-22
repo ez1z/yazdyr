@@ -33,11 +33,11 @@ class _RecordPaymentScreenState extends State<RecordPaymentScreen> {
   Future<void> _save() async {
     final l = LedgerScope.read(context);
     if (!_canSave) return;
-    await l.recordPayment(l.selected.id,
-        amount: _parsed!,
-        notes: _notes.text,
-        date:
-            '${_date.year}-${_date.month.toString().padLeft(2, '0')}-${_date.day.toString().padLeft(2, '0')}');
+    final iso =
+        '${_date.year}-${_date.month.toString().padLeft(2, '0')}-${_date.day.toString().padLeft(2, '0')}';
+    final tx = await l.recordPayment(l.selected.id,
+        amount: _parsed!, notes: _notes.text, date: iso);
+    sendActivitySms(l, tx);
     if (!mounted) return;
     Navigator.of(context).pop();
     showToast(context, l.t('toastPaymentRecorded'));

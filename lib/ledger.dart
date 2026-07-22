@@ -28,7 +28,6 @@ class Ledger extends ChangeNotifier {
   List<Customer> customers = const [];
   String theme = 'light';
   String language = 'tk';
-  bool autoSendSms = false;
 
   // ---- transient UI state (not persisted, matches prototype) ----
   String? selectedId;
@@ -48,16 +47,12 @@ class Ledger extends ChangeNotifier {
     customers = data.customers;
     theme = data.theme;
     language = data.language;
-    autoSendSms = data.autoSendSms;
     loaded = true;
     notifyListeners();
   }
 
-  Future<void> _persist() => store.save(LedgerData(
-      customers: customers,
-      theme: theme,
-      language: language,
-      autoSendSms: autoSendSms));
+  Future<void> _persist() =>
+      store.save(LedgerData(customers: customers, theme: theme, language: language));
 
   // ---- settings ----
   void setTheme(String t) {
@@ -68,12 +63,6 @@ class Ledger extends ChangeNotifier {
 
   void setLanguage(String l) {
     language = l;
-    notifyListeners();
-    _persist();
-  }
-
-  void setAutoSendSms(bool v) {
-    autoSendSms = v;
     notifyListeners();
     _persist();
   }
@@ -180,7 +169,13 @@ class Ledger extends ChangeNotifier {
       if (c.id != customerId) return c;
       final txs = c.transactions
           .map((t) => t.id == txnId
-              ? Txn(id: t.id, type: type, amount: amount, label: label, date: date)
+              ? Txn(
+                  id: t.id,
+                  type: type,
+                  amount: amount,
+                  label: label,
+                  date: date,
+                  createdAt: t.createdAt) // editing keeps the original record time
               : t)
           .toList();
       return c.copyWith(transactions: txs).sorted();
@@ -200,7 +195,7 @@ class Ledger extends ChangeNotifier {
     await _persist();
   }
 
-  Future<void> _addTxn(String customerId, Txn tx) async {
+  Future<Txn> _addTxn(String customerId, Txn tx) async {
     customers = customers
         .map((c) => c.id == customerId
             ? c.copyWith(transactions: [tx, ...c.transactions]).sorted()
@@ -208,9 +203,10 @@ class Ledger extends ChangeNotifier {
         .toList();
     notifyListeners();
     await _persist();
+    return tx;
   }
 
-  Future<void> addCredit(String customerId,
+  Future<Txn> addCredit(String customerId,
       {required double amount, String desc = '', String? date}) {
     return _addTxn(
         customerId,
@@ -219,10 +215,11 @@ class Ledger extends ChangeNotifier {
             type: 'credit',
             amount: amount,
             label: desc.trim().isEmpty ? 'Credit entry' : desc.trim(),
-            date: date ?? todayIso()));
+            date: date ?? todayIso(),
+            createdAt: DateTime.now().toIso8601String()));
   }
 
-  Future<void> recordPayment(String customerId,
+  Future<Txn> recordPayment(String customerId,
       {required double amount, String notes = '', String? date}) {
     return _addTxn(
         customerId,
@@ -231,7 +228,8 @@ class Ledger extends ChangeNotifier {
             type: 'payment',
             amount: amount,
             label: notes.trim().isEmpty ? 'Payment' : notes.trim(),
-            date: date ?? todayIso()));
+            date: date ?? todayIso(),
+            createdAt: DateTime.now().toIso8601String()));
   }
 
   // ---- computed (renderVals) ----

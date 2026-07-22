@@ -1,13 +1,7 @@
 package com.yazdyr.yazdyr
 
-import android.Manifest
 import android.content.Intent
-import android.content.pm.PackageManager
 import android.net.Uri
-import android.os.Build
-import android.telephony.SmsManager
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import io.flutter.embedding.android.FlutterActivity
 import io.flutter.embedding.engine.FlutterEngine
 import io.flutter.plugin.common.MethodChannel
@@ -39,30 +33,6 @@ class MainActivity : FlutterActivity() {
                             .addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
                         startActivity(intent)
                         result.success(null)
-                    }
-                    "smsSend" -> {
-                        // ponytail: silent send needs the SEND_SMS permission, which
-                        // Google Play restricts — opt-in only (Settings, off by
-                        // default). On first use we request the permission and return
-                        // false so Dart falls back to the composer this once.
-                        val args = call.arguments as Map<*, *>
-                        if (ContextCompat.checkSelfPermission(
-                                this, Manifest.permission.SEND_SMS)
-                            == PackageManager.PERMISSION_GRANTED) {
-                            val sms = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.S)
-                                getSystemService(SmsManager::class.java)
-                            else
-                                @Suppress("DEPRECATION") SmsManager.getDefault()
-                            val body = args["body"] as String
-                            sms.sendMultipartTextMessage(
-                                args["phone"] as String, null,
-                                sms.divideMessage(body), null, null)
-                            result.success(true)
-                        } else {
-                            ActivityCompat.requestPermissions(
-                                this, arrayOf(Manifest.permission.SEND_SMS), 1001)
-                            result.success(false)
-                        }
                     }
                     else -> result.notImplemented()
                 }

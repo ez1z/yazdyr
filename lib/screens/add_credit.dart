@@ -33,8 +33,9 @@ class _AddCreditScreenState extends State<AddCreditScreen> {
   Future<void> _save() async {
     final l = LedgerScope.read(context);
     if (!_canSave) return;
-    await l.addCredit(l.selected.id,
+    final tx = await l.addCredit(l.selected.id,
         amount: _parsed!, desc: _desc.text, date: _isoOf(_date));
+    sendActivitySms(l, tx);
     if (!mounted) return;
     Navigator.of(context).pop();
     showToast(context, l.t('toastCreditSaved'));

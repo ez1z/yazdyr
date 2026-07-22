@@ -5,7 +5,8 @@ class Txn {
   final String type; // 'credit' | 'payment'
   final double amount;
   final String label;
-  final String date; // ISO 'yyyy-MM-dd'
+  final String date; // ISO 'yyyy-MM-dd' — business date, drives sort/filter
+  final String createdAt; // ISO-8601 timestamp of when it was recorded
 
   const Txn({
     required this.id,
@@ -13,6 +14,7 @@ class Txn {
     required this.amount,
     required this.label,
     required this.date,
+    required this.createdAt,
   });
 
   bool get isCredit => type == 'credit';
@@ -24,6 +26,7 @@ class Txn {
         'amount': amount,
         'label': label,
         'date': date,
+        'createdAt': createdAt,
       };
 
   factory Txn.fromJson(Map<String, dynamic> j) => Txn(
@@ -32,6 +35,8 @@ class Txn {
         amount: (j['amount'] as num).toDouble(),
         label: (j['label'] as String?) ?? '',
         date: j['date'] as String,
+        // Old records predate createdAt — fall back to midnight of the date.
+        createdAt: (j['createdAt'] as String?) ?? '${j['date']}T00:00:00',
       );
 }
 

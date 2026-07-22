@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
+import 'format.dart';
 import 'ledger.dart';
+import 'models.dart';
 import 'theme.dart';
 
 // Opens the SMS composer pre-filled via a tiny native intent (share_plus /
@@ -14,17 +16,20 @@ Future<void> sendSms(String phone, String body) async {
   } catch (_) {}
 }
 
-// Silent send (opt-in "auto-send" setting). Returns false when it couldn't send
-// — e.g. SEND_SMS not granted yet, or off Android — so the caller can fall back
-// to the composer.
-Future<bool> sendSmsAuto(String phone, String body) async {
-  try {
-    final ok = await _smsChannel.invokeMethod('smsSend',
-        {'phone': phone, 'body': body});
-    return ok == true;
-  } catch (_) {
-    return false;
-  }
+// After a credit/payment is recorded, open the messaging app pre-filled with a
+// receipt for that one transaction (name, amount, localized timestamp, new
+// balance). No-op when the customer has no phone. Call after the txn is persisted
+// so the balance is current.
+void sendActivitySms(Ledger l, Txn tx) {
+  final c = l.selected;
+  if (c.phone.isEmpty) return;
+  final msg = l
+      .t(tx.isCredit ? 'smsCreditMsg' : 'smsPaymentMsg')
+      .replaceFirst('{name}', c.name)
+      .replaceFirst('{amount}', money(tx.amount))
+      .replaceFirst('{date}', localDateTime(tx.createdAt, l.language))
+      .replaceFirst('{balance}', money(c.balance));
+  sendSms(c.phone, msg);
 }
 
 // InheritedNotifier so any screen can read the Ledger and rebuild on change.

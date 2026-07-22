@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../format.dart';
 import '../ledger.dart';
-import '../models.dart';
 import '../widgets.dart';
 import 'add_credit.dart';
 import 'customer_form.dart';
@@ -33,12 +32,6 @@ class CustomerDetailScreen extends StatelessWidget {
           ],
         ),
         actions: [
-          if (c.phone.isNotEmpty)
-            IconButton(
-              icon: const Icon(Icons.sms_outlined),
-              tooltip: l.t('sendSms'),
-              onPressed: () => _onSmsPressed(context, l, c),
-            ),
           IconButton(
             icon: const Icon(Icons.delete_outline),
             tooltip: l.t('deleteCustomer'),
@@ -110,7 +103,7 @@ class CustomerDetailScreen extends StatelessWidget {
                     builder: (_) =>
                         TxnFormScreen(customerId: c.id, txn: t))),
                 child: txRow(context,
-                    title: shortDate(t.date),
+                    title: localDateTime(t.createdAt, l.language),
                     subtitle: t.label,
                     amount: money(t.amount),
                     isCredit: t.isCredit),
@@ -145,133 +138,5 @@ class CustomerDetailScreen extends StatelessWidget {
     if (!context.mounted) return;
     Navigator.of(context).pop(); // back to customers list
     showToast(context, l.t('toastCustomerDeleted'));
-  }
-}
-
-// Auto-send on: compose the full ledger message and fire it silently, no popup.
-// Off: open the compose sheet (review/edit, then the messaging app).
-Future<void> _onSmsPressed(BuildContext context, Ledger l, Customer c) async {
-  if (!l.autoSendSms) {
-    showModalBottomSheet<void>(
-      context: context,
-      isScrollControlled: true,
-      builder: (_) => _SmsSheet(customer: c, l: l),
-    );
-    return;
-  }
-  final body = _composeSms(l, c, balance: true, transactions: true);
-  final sent = await sendSmsAuto(c.phone, body);
-  if (!context.mounted) return;
-  if (sent) {
-    showToast(context, l.t('toastSmsSent'));
-  } else {
-    // Not sent (permission just requested / non-Android) — fall back this once.
-    sendSms(c.phone, body);
-  }
-}
-
-// Builds the SMS body from the selected sections. The composer is also editable,
-// so this is just a sensible starting point.
-String _composeSms(Ledger l, Customer c,
-    {required bool balance, required bool transactions}) {
-  final lines = <String>['${l.t('smsGreeting')} ${c.name}'];
-  if (balance) lines.add('${l.t('smsBalanceLabel')}: ${money(c.balance)}');
-  if (transactions && c.transactions.isNotEmpty) {
-    lines.add('');
-    for (final t in c.transactions) {
-      final amount = '${t.isCredit ? '+' : '-'}${money(t.amount)}';
-      final label = t.label.isNotEmpty
-          ? '  (${t.label})'
-          : (t.isPayment ? '  (${l.t('smsPaymentWord')})' : '');
-      lines.add('${shortDate(t.date)}  $amount$label');
-    }
-  }
-  return lines.join('\n');
-}
-
-// Bottom sheet: pick what to include, tweak the text, then send.
-class _SmsSheet extends StatefulWidget {
-  const _SmsSheet({required this.customer, required this.l});
-  final Customer customer;
-  final Ledger l;
-
-  @override
-  State<_SmsSheet> createState() => _SmsSheetState();
-}
-
-class _SmsSheetState extends State<_SmsSheet> {
-  bool _balance = true;
-  bool _transactions = true;
-  late final TextEditingController _controller =
-      TextEditingController(text: _compose());
-
-  String _compose() => _composeSms(widget.l, widget.customer,
-      balance: _balance, transactions: _transactions);
-
-  void _regenerate() => _controller.text = _compose();
-
-  @override
-  void dispose() {
-    _controller.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    final l = widget.l;
-    return Padding(
-      padding: EdgeInsets.only(
-        left: 18,
-        right: 18,
-        top: 18,
-        bottom: MediaQuery.of(context).viewInsets.bottom + 18,
-      ),
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          Text(l.t('sendSms'),
-              style:
-                  const TextStyle(fontSize: 18, fontWeight: FontWeight.w700)),
-          const SizedBox(height: 8),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            dense: true,
-            title: Text(l.t('smsIncludeBalance')),
-            value: _balance,
-            onChanged: (v) => setState(() {
-              _balance = v;
-              _regenerate();
-            }),
-          ),
-          SwitchListTile(
-            contentPadding: EdgeInsets.zero,
-            dense: true,
-            title: Text(l.t('smsIncludeTransactions')),
-            value: _transactions,
-            onChanged: (v) => setState(() {
-              _transactions = v;
-              _regenerate();
-            }),
-          ),
-          const SizedBox(height: 8),
-          TextField(
-            controller: _controller,
-            maxLines: 6,
-            minLines: 3,
-            decoration: const InputDecoration(border: OutlineInputBorder()),
-          ),
-          const SizedBox(height: 12),
-          FilledButton.icon(
-            onPressed: () {
-              sendSms(widget.customer.phone, _controller.text);
-              Navigator.of(context).pop();
-            },
-            icon: const Icon(Icons.send, size: 16),
-            label: Text(l.t('send')),
-          ),
-        ],
-      ),
-    );
   }
 }
