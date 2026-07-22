@@ -1,7 +1,31 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'ledger.dart';
 import 'theme.dart';
+
+// Opens the SMS composer pre-filled via a tiny native intent (share_plus /
+// url_launcher are uncached offline). Sent from the owner's own number; the
+// owner reviews before sending. No-op off Android or with no SMS app.
+const _smsChannel = MethodChannel('yazdyr/url');
+Future<void> sendSms(String phone, String body) async {
+  try {
+    await _smsChannel.invokeMethod('sms', {'phone': phone, 'body': body});
+  } catch (_) {}
+}
+
+// Silent send (opt-in "auto-send" setting). Returns false when it couldn't send
+// — e.g. SEND_SMS not granted yet, or off Android — so the caller can fall back
+// to the composer.
+Future<bool> sendSmsAuto(String phone, String body) async {
+  try {
+    final ok = await _smsChannel.invokeMethod('smsSend',
+        {'phone': phone, 'body': body});
+    return ok == true;
+  } catch (_) {
+    return false;
+  }
+}
 
 // InheritedNotifier so any screen can read the Ledger and rebuild on change.
 class LedgerScope extends InheritedNotifier<Ledger> {

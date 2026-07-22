@@ -28,6 +28,7 @@ class Ledger extends ChangeNotifier {
   List<Customer> customers = const [];
   String theme = 'light';
   String language = 'tk';
+  bool autoSendSms = false;
 
   // ---- transient UI state (not persisted, matches prototype) ----
   String? selectedId;
@@ -47,12 +48,16 @@ class Ledger extends ChangeNotifier {
     customers = data.customers;
     theme = data.theme;
     language = data.language;
+    autoSendSms = data.autoSendSms;
     loaded = true;
     notifyListeners();
   }
 
-  Future<void> _persist() =>
-      store.save(LedgerData(customers: customers, theme: theme, language: language));
+  Future<void> _persist() => store.save(LedgerData(
+      customers: customers,
+      theme: theme,
+      language: language,
+      autoSendSms: autoSendSms));
 
   // ---- settings ----
   void setTheme(String t) {
@@ -63,6 +68,12 @@ class Ledger extends ChangeNotifier {
 
   void setLanguage(String l) {
     language = l;
+    notifyListeners();
+    _persist();
+  }
+
+  void setAutoSendSms(bool v) {
+    autoSendSms = v;
     notifyListeners();
     _persist();
   }

@@ -1,4 +1,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android">
+    <!-- Only used by the opt-in "auto-send SMS" setting (silent send). Off by
+         default; without it the app just opens the messaging composer instead. -->
+    <uses-permission android:name="android.permission.SEND_SMS"/>
     <application
         android:label="Ýazdyr"
         android:name="${applicationName}"

@@ -56,6 +56,14 @@ class SettingsScreen extends StatelessWidget {
             style: const ButtonStyle(visualDensity: VisualDensity.compact),
           ),
         ),
+        _row(
+          context,
+          l.t('autoSendSms'),
+          trailing: Switch(
+            value: l.autoSendSms,
+            onChanged: l.setAutoSendSms,
+          ),
+        ),
         _link(context, l.t('reports'), const ReportsScreen()),
         _link(context, l.t('about'), const AboutScreen()),
         const SizedBox(height: 28),

@@ -10,15 +10,17 @@ class LedgerData {
   final List<Customer> customers;
   final String theme; // 'light' | 'dark'
   final String language; // 'en' | 'tk' | 'ru'
+  final bool autoSendSms; // send SMS silently vs. open the messaging app
   const LedgerData({
     required this.customers,
     this.theme = 'light',
     this.language = 'tk',
+    this.autoSendSms = false,
   });
 
   Map<String, dynamic> toJson() => {
         'version': 1,
-        'meta': {'theme': theme, 'language': language},
+        'meta': {'theme': theme, 'language': language, 'autoSendSms': autoSendSms},
         'customers': customers.map((c) => c.toJson()).toList(),
       };
 
@@ -30,6 +32,7 @@ class LedgerData {
           .toList(),
       theme: (meta['theme'] as String?) ?? 'light',
       language: (meta['language'] as String?) ?? 'tk',
+      autoSendSms: (meta['autoSendSms'] as bool?) ?? false,
     );
   }
 }

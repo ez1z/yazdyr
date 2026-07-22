@@ -117,6 +117,22 @@ const Map<String, Map<String, String>> _str = {
   },
   'cancel': {'en': 'Cancel', 'tk': 'Ýatyr', 'ru': 'Отмена'},
   'delete': {'en': 'Delete', 'tk': 'Poz', 'ru': 'Удалить'},
+  // Send-SMS feature
+  'sendSms': {'en': 'Send SMS', 'tk': 'SMS ýollamak', 'ru': 'Отправить SMS'},
+  'send': {'en': 'Send', 'tk': 'Ýolla', 'ru': 'Отправить'},
+  'autoSendSms': {
+    'en': 'Auto-send SMS', 'tk': 'SMS awto-ýollamak', 'ru': 'Авто-отправка SMS'
+  },
+  'toastSmsSent': {'en': 'SMS sent', 'tk': 'SMS ýollandy', 'ru': 'SMS отправлено'},
+  'smsIncludeBalance': {
+    'en': 'Include balance', 'tk': 'Balansy goş', 'ru': 'Включить баланс'
+  },
+  'smsIncludeTransactions': {
+    'en': 'Include transactions', 'tk': 'Amallary goş', 'ru': 'Включить операции'
+  },
+  'smsGreeting': {'en': 'Hello', 'tk': 'Salam', 'ru': 'Здравствуйте'},
+  'smsBalanceLabel': {'en': 'Balance', 'tk': 'Galan bergi', 'ru': 'Остаток'},
+  'smsPaymentWord': {'en': 'payment', 'tk': 'töleg', 'ru': 'оплата'},
   'toastCustomerDeleted': {'en': 'Customer deleted', 'tk': 'Müşderi pozuldy', 'ru': 'Клиент удалён'},
   'transactionHistory': {'en': 'Transaction History', 'tk': 'Amallar taryhy', 'ru': 'История операций'},
   'editTransaction': {'en': 'Edit Transaction', 'tk': 'Amaly üýtget', 'ru': 'Изменить операцию'},
