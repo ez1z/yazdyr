@@ -1,8 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 
 import 'format.dart';
 import 'models.dart';
 import 'store.dart';
+import 'xlsx.dart';
 
 // A transaction paired with its owner's name, for cross-customer lists.
 class ActivityItem {
@@ -28,6 +31,11 @@ class Ledger extends ChangeNotifier {
   List<Customer> customers = const [];
   String theme = 'light';
   String language = 'tk';
+  String backupInterval = 'off'; // off | daily | weekly | monthly
+  String lastBackup = ''; // ISO datetime, or '' if never backed up
+  // Custom SMS receipt templates; '' falls back to the translated default.
+  String smsCreditTemplate = '';
+  String smsPaymentTemplate = '';
 
   // ---- transient UI state (not persisted, matches prototype) ----
   String? selectedId;
@@ -47,12 +55,121 @@ class Ledger extends ChangeNotifier {
     customers = data.customers;
     theme = data.theme;
     language = data.language;
+    backupInterval = data.backupInterval;
+    lastBackup = data.lastBackup;
+    smsCreditTemplate = data.smsCreditTemplate;
+    smsPaymentTemplate = data.smsPaymentTemplate;
     loaded = true;
     notifyListeners();
   }
 
-  Future<void> _persist() =>
-      store.save(LedgerData(customers: customers, theme: theme, language: language));
+  LedgerData _snapshot() => LedgerData(
+        customers: customers,
+        theme: theme,
+        language: language,
+        backupInterval: backupInterval,
+        lastBackup: lastBackup,
+        smsCreditTemplate: smsCreditTemplate,
+        smsPaymentTemplate: smsPaymentTemplate,
+      );
+
+  Future<void> _persist() => store.save(_snapshot());
+
+  // ---- SMS receipt templates ----
+
+  // The template actually used for the receipt: the owner's custom text, or the
+  // translated default when they haven't set one.
+  String smsTemplate(bool isCredit) {
+    final custom = isCredit ? smsCreditTemplate : smsPaymentTemplate;
+    return custom.isNotEmpty ? custom : t(isCredit ? 'smsCreditMsg' : 'smsPaymentMsg');
+  }
+
+  // Store a custom template (trimmed); '' resets to the translated default.
+  void setSmsTemplate({required bool isCredit, required String value}) {
+    final v = value.trim();
+    if (isCredit) {
+      smsCreditTemplate = v;
+    } else {
+      smsPaymentTemplate = v;
+    }
+    notifyListeners();
+    _persist();
+  }
+
+  // ---- backup / restore ----
+
+  void setBackupInterval(String v) {
+    backupInterval = v;
+    notifyListeners();
+    _persist();
+  }
+
+  // Write a backup now, stamp lastBackup, persist. Returns the file so the UI
+  // can hand its path to the native share intent.
+  Future<File> backupNow() async {
+    final f = await store.writeBackup(_snapshot());
+    lastBackup = DateTime.now().toIso8601String();
+    notifyListeners();
+    await _persist();
+    return f;
+  }
+
+  // Called once after init(): back up if the chosen interval has elapsed. This
+  // is launch-time, not truly backgrounded — the app must be opened to run.
+  Future<void> maybeAutoBackup() async {
+    const spans = {'daily': 1, 'weekly': 7, 'monthly': 30};
+    final days = spans[backupInterval];
+    if (days == null) return; // 'off' or unknown
+    if (lastBackup.isNotEmpty) {
+      final last = DateTime.tryParse(lastBackup);
+      if (last != null && DateTime.now().difference(last).inDays < days) return;
+    }
+    await backupNow();
+  }
+
+  Future<List<File>> listBackups() => store.listBackups();
+
+  // Replace the customer list from a restored snapshot. Snapshots current data
+  // to the backup folder first, so a restore is itself undoable. UI prefs
+  // (theme/language) are left as-is — only the valuable ledger data is restored.
+  Future<void> restore(LedgerData data) async {
+    await store.writeBackup(_snapshot());
+    customers = data.customers;
+    selectedId = null;
+    notifyListeners();
+    await _persist();
+  }
+
+  Future<void> restoreFile(File f) async => restore(await store.readBackup(f));
+
+  // Parse a JSON backup string (from the native file picker) and restore it.
+  // Throws on malformed input — the caller shows an error toast.
+  Future<void> importJson(String jsonStr) async =>
+      restore(store.parse(jsonStr));
+
+  // One-way readable Excel export: a Customers sheet + a Transactions sheet.
+  // Not a backup format (spreadsheets flatten the data) — JSON is for restore.
+  Future<File> exportXlsx() async {
+    final sheets = [
+      XlsxSheet(t('sheetCustomers'), [
+        [t('colName'), t('colPhone'), t('colAddress'), t('colBalance')],
+        for (final c in customers) [c.name, c.phone, c.address, Money(c.balance)],
+      ]),
+      XlsxSheet(t('sheetTransactions'), [
+        [t('colCustomer'), t('colDate'), t('colType'), t('colAmount'), t('colLabel')],
+        for (final c in customers)
+          for (final tx in c.transactions)
+            [
+              c.name,
+              tx.date,
+              t(tx.isCredit ? 'typeCredit' : 'typePayment'),
+              Money(tx.amount),
+              tx.label,
+            ],
+      ]),
+    ];
+    return store.writeExport('yazdyr-export', 'xlsx', buildXlsx(sheets));
+  }
 
   // ---- settings ----
   void setTheme(String t) {

@@ -3,6 +3,7 @@ import 'dart:io';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:yazdyr/ledger.dart';
 import 'package:yazdyr/store.dart';
+import 'package:yazdyr/xlsx.dart';
 
 // Runnable check for the money logic + the gap we closed (search/sort).
 // Uses a temp-dir JSON store — pure Dart, no path_provider needed.
@@ -83,4 +84,101 @@ void main() {
     await l2.init();
     expect(l2.customers.any((c) => c.name == 'Persisted Person'), isTrue);
   });
+
+  test('backupNow writes a file and stamps lastBackup', () async {
+    final l = await _seededLedger();
+    expect(l.lastBackup, '');
+    final f = await l.backupNow();
+    expect(await f.exists(), isTrue);
+    expect(l.lastBackup, isNot(''));
+    expect((await l.listBackups()).length, 1);
+  });
+
+  test('prune keeps only the newest 5 backups', () async {
+    final l = await _seededLedger();
+    final dir = l.store.backupDir;
+    await dir.create(recursive: true);
+    // Seed 6 pre-existing backups with distinct (chronological) filenames.
+    for (var i = 0; i < 6; i++) {
+      await File('${dir.path}/backup-20260101-0000${i.toString().padLeft(2, '0')}.json')
+          .writeAsString('{"meta":{},"customers":[]}');
+    }
+    expect((await l.listBackups()).length, 6);
+    await l.store.writeBackup(_dummy(0)); // triggers prune to 5
+    expect((await l.listBackups()).length, 5);
+  });
+
+  test('restore replaces data and snapshots current first', () async {
+    final l = await _seededLedger();
+    final backup = l.store.parse(
+        '{"meta":{},"customers":[{"id":"c1","name":"Restored","transactions":[]}]}');
+    final countBefore = (await l.listBackups()).length;
+    await l.restore(backup);
+    expect(l.customers.length, 1);
+    expect(l.customers.single.name, 'Restored');
+    // A pre-restore snapshot of the old data was written.
+    expect((await l.listBackups()).length, countBefore + 1);
+  });
+
+  test('importJson rejects malformed input', () async {
+    final l = await _seededLedger();
+    final before = l.customers.length;
+    expect(() => l.importJson('not json'), throwsA(anything));
+    expect(l.customers.length, before); // unchanged
+  });
+
+  test('maybeAutoBackup respects the interval', () async {
+    final l = await _seededLedger();
+    // off => no backup
+    await l.maybeAutoBackup();
+    expect((await l.listBackups()).length, 0);
+    // weekly, never backed up => backs up
+    l.setBackupInterval('weekly');
+    await l.maybeAutoBackup();
+    expect((await l.listBackups()).length, 1);
+    // just backed up => within interval, no second backup
+    await l.maybeAutoBackup();
+    expect((await l.listBackups()).length, 1);
+  });
+
+  test('crc32 matches the standard check vector', () {
+    // "123456789" -> 0xCBF43926 is the canonical CRC-32 test value.
+    expect(crc32('123456789'.codeUnits), 0xCBF43926);
+  });
+
+  test('buildXlsx produces a valid ZIP with the sheet content', () {
+    final bytes = buildXlsx([
+      XlsxSheet('Customers', [
+        ['Name', 'Balance'],
+        ['Aygul', 105],
+      ]),
+    ]);
+    // ZIP local-file-header magic 'PK\x03\x04' and EOCD magic 'PK\x05\x06'.
+    expect(bytes.sublist(0, 4), [0x50, 0x4B, 0x03, 0x04]);
+    expect(bytes.sublist(bytes.length - 22, bytes.length - 18),
+        [0x50, 0x4B, 0x05, 0x06]);
+    final text = String.fromCharCodes(bytes);
+    expect(text.contains('Aygul'), isTrue);
+    expect(text.contains('<v>105</v>'), isTrue);
+    expect(text.contains('styles.xml'), isTrue); // styles part present
+    expect(text.contains('s="1"'), isTrue); // header row is bold-styled
+  });
+
+  test('exportXlsx styles currency cells with the TMT format', () async {
+    final l = await _seededLedger();
+    final f = await l.exportXlsx();
+    final text = String.fromCharCodes(await f.readAsBytes());
+    expect(text.contains('s="2"'), isTrue); // Money cells use the TMT numFmt
+  });
+
+  test('exportXlsx writes an .xlsx file', () async {
+    final l = await _seededLedger();
+    final f = await l.exportXlsx();
+    expect(await f.exists(), isTrue);
+    expect(f.path.endsWith('.xlsx'), isTrue);
+    expect((await f.readAsBytes()).sublist(0, 2), [0x50, 0x4B]); // 'PK'
+  });
 }
+
+LedgerData _dummy(int i) =>
+    LedgerData(customers: const [], lastBackup: 'x$i');

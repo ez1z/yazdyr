@@ -1,6 +1,17 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import '../widgets.dart';
+
+// Opens a URL via a tiny native intent (url_launcher is uncached offline).
+const _urlChannel = MethodChannel('yazdyr/url');
+Future<void> _openUrl(String url) async {
+  try {
+    await _urlChannel.invokeMethod('open', url);
+  } catch (_) {
+    // No handler (e.g. non-Android) or no app to open it — nothing to do.
+  }
+}
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -25,11 +36,41 @@ class AboutScreen extends StatelessWidget {
                       .onSurface
                       .withValues(alpha: 0.6))),
           Divider(height: 32, color: Theme.of(context).dividerColor),
+          _para(context, l.t('aboutFeaturesTitle'), l.t('aboutFeaturesBody')),
           _para(context, l.t('aboutOfflineTitle'), l.t('aboutOfflineBody')),
           _para(context, l.t('storageTitle'), l.storageInfoLabel),
           _para(context, l.t('privacyTitle'), l.t('privacyBody')),
+          Divider(height: 32, color: Theme.of(context).dividerColor),
+          _credit(context),
         ],
       ),
+    );
+  }
+
+  // App author credit. Not translated — it's a name and a handle.
+  Widget _credit(BuildContext context) {
+    final muted =
+        Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.5);
+    return Column(
+      children: [
+        Text('Eziz Agamyradov',
+            style: TextStyle(
+                fontSize: 12, fontWeight: FontWeight.w600, color: muted)),
+        const SizedBox(height: 2),
+        InkWell(
+          onTap: () => _openUrl('https://instagram.com/ezxz.a'),
+          borderRadius: BorderRadius.circular(6),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 6),
+            child: Text('Instagram @ezxz.a',
+                style: TextStyle(
+                    fontSize: 12,
+                    color: Theme.of(context).colorScheme.primary,
+                    decoration: TextDecoration.underline,
+                    decorationColor: Theme.of(context).colorScheme.primary)),
+          ),
+        ),
+      ],
     );
   }
 

@@ -24,7 +24,7 @@ void sendActivitySms(Ledger l, Txn tx) {
   final c = l.selected;
   if (c.phone.isEmpty) return;
   final msg = l
-      .t(tx.isCredit ? 'smsCreditMsg' : 'smsPaymentMsg')
+      .smsTemplate(tx.isCredit)
       .replaceFirst('{name}', c.name)
       .replaceFirst('{amount}', money(tx.amount))
       .replaceFirst('{date}', localDateTime(tx.createdAt, l.language))

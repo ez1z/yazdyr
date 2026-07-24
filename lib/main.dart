@@ -1,4 +1,8 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
+import 'package:path/path.dart' as p;
 import 'package:path_provider/path_provider.dart';
 
 import 'ledger.dart';
@@ -30,8 +34,13 @@ class _YazdyrAppState extends State<YazdyrApp> {
 
   Future<void> _bootstrap() async {
     final docs = await getApplicationDocumentsDirectory();
-    final ledger = Ledger(Store(docs));
+    // External storage dir so a file manager can reach backups; null on the
+    // rare device without it, in which case Store falls back to a docs subdir.
+    final ext = await getExternalStorageDirectory();
+    final backups = ext == null ? null : Directory(p.join(ext.path, 'backups'));
+    final ledger = Ledger(Store(docs, backups));
     await ledger.init();
+    unawaited(ledger.maybeAutoBackup()); // launch-time scheduled backup
     if (mounted) setState(() => _ledger = ledger);
   }
 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths>
+    <!-- getExternalStorageDirectory() (path_provider) == getExternalFilesDir(null);
+         backups (.json) and Excel exports (.xlsx) live in its "backups/" subdir. -->
+    <external-files-path name="backups" path="backups/" />
+</paths>

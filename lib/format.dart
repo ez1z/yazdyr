@@ -221,6 +221,43 @@ const Map<String, Map<String, String>> _str = {
   'reports': {'en': 'Reports', 'tk': 'Hasabatlar', 'ru': 'Отчёты'},
   'about': {'en': 'About', 'tk': 'Barada', 'ru': 'О приложении'},
 
+  // Backup & restore
+  'backupRestore': {'en': 'Backup & Restore', 'tk': 'Ätiýaçlyk & Dikeltmek', 'ru': 'Резервные копии'},
+  'backupInterval': {'en': 'Automatic backup', 'tk': 'Awtomatik ätiýaçlyk', 'ru': 'Автоматическое резервирование'},
+  'intervalOff': {'en': 'Off', 'tk': 'Öçük', 'ru': 'Выкл'},
+  'intervalDaily': {'en': 'Daily', 'tk': 'Günde', 'ru': 'Ежедневно'},
+  'intervalWeekly': {'en': 'Weekly', 'tk': 'Hepdede', 'ru': 'Еженедельно'},
+  'intervalMonthly': {'en': 'Monthly', 'tk': 'Aýda', 'ru': 'Ежемесячно'},
+  'lastBackup': {'en': 'Last backup: {date}', 'tk': 'Soňky ätiýaçlyk: {date}', 'ru': 'Последняя копия: {date}'},
+  'lastBackupNever': {'en': 'No backup yet', 'tk': 'Entek ätiýaçlyk ýok', 'ru': 'Копий пока нет'},
+  'backupNow': {'en': 'Back up now', 'tk': 'Häzir ätiýaçlyk al', 'ru': 'Создать копию'},
+  'shareExport': {'en': 'Share / Export backup', 'tk': 'Ätiýaçlygy paýlaş / çykar', 'ru': 'Поделиться / экспорт'},
+  'importBackup': {'en': 'Import from file', 'tk': 'Faýldan getir', 'ru': 'Импорт из файла'},
+  'restoreLocal': {'en': 'Restore from backup', 'tk': 'Ätiýaçlykdan dikelt', 'ru': 'Восстановить из копии'},
+  'noBackups': {'en': 'No backups found', 'tk': 'Ätiýaçlyk tapylmady', 'ru': 'Копии не найдены'},
+  'restoreConfirm': {
+    'en': 'Replace ALL current data with this backup? Current data is saved to a new backup first.',
+    'tk': 'Ähli häzirki maglumaty şu ätiýaçlyk bilen çalyşmakçymy? Häzirki maglumat ilki täze ätiýaçlyga saklanýar.',
+    'ru': 'Заменить ВСЕ текущие данные этой копией? Текущие данные сначала сохранятся в новую копию.'
+  },
+  'restore': {'en': 'Restore', 'tk': 'Dikelt', 'ru': 'Восстановить'},
+  'backupDone': {'en': 'Backup saved', 'tk': 'Ätiýaçlyk saklandy', 'ru': 'Копия сохранена'},
+  'restoreDone': {'en': 'Data restored', 'tk': 'Maglumat dikeldildi', 'ru': 'Данные восстановлены'},
+  'importInvalid': {'en': 'Invalid backup file', 'tk': 'Nädogry ätiýaçlyk faýly', 'ru': 'Неверный файл копии'},
+  'exportExcel': {'en': 'Export to Excel', 'tk': 'Excel-e çykar', 'ru': 'Экспорт в Excel'},
+  'exportDone': {'en': 'Excel file created', 'tk': 'Excel faýly döredildi', 'ru': 'Файл Excel создан'},
+  'sheetCustomers': {'en': 'Customers', 'tk': 'Müşderiler', 'ru': 'Клиенты'},
+  'sheetTransactions': {'en': 'Transactions', 'tk': 'Amallar', 'ru': 'Операции'},
+  'colName': {'en': 'Name', 'tk': 'Ady', 'ru': 'Имя'},
+  'colPhone': {'en': 'Phone', 'tk': 'Telefon', 'ru': 'Телефон'},
+  'colAddress': {'en': 'Address', 'tk': 'Salgysy', 'ru': 'Адрес'},
+  'colBalance': {'en': 'Balance', 'tk': 'Balans', 'ru': 'Баланс'},
+  'colCustomer': {'en': 'Customer', 'tk': 'Müşderi', 'ru': 'Клиент'},
+  'colDate': {'en': 'Date', 'tk': 'Sene', 'ru': 'Дата'},
+  'colType': {'en': 'Type', 'tk': 'Görnüşi', 'ru': 'Тип'},
+  'colAmount': {'en': 'Amount', 'tk': 'Möçberi', 'ru': 'Сумма'},
+  'colLabel': {'en': 'Note', 'tk': 'Belligi', 'ru': 'Примечание'},
+
   // Reports
   'totalCreditGiven': {'en': 'Total Credit Given', 'tk': 'Berlen jemi karz', 'ru': 'Всего выдано в долг'},
   'totalPaymentsReceived': {
@@ -231,7 +268,48 @@ const Map<String, Map<String, String>> _str = {
   'outstandingBalance': {'en': 'Outstanding Balance', 'tk': 'Galan balans', 'ru': 'Остаток баланса'},
 
   // About
-  'version': {'en': 'Version 1.0.0 (MVP)', 'tk': 'Wersiýa 1.0.0 (MVP)', 'ru': 'Версия 1.0.0 (MVP)'},
+  'version': {'en': 'Version 1.1.2', 'tk': 'Wersiýa 1.1.2', 'ru': 'Версия 1.1.2'},
+  'aboutFeaturesTitle': {'en': 'Features', 'tk': 'Mümkinçilikler', 'ru': 'Возможности'},
+  'aboutFeaturesBody': {
+    'en': '• Track customers, credits and payments\n'
+        '• Automatic balance and overdue tracking\n'
+        '• Activity feed of every transaction\n'
+        '• SMS receipts sent after each credit or payment\n'
+        '• Reports and Excel export\n'
+        '• Backup, restore and share your data\n'
+        '• Turkmen, English and Russian · light and dark themes',
+    'tk': '• Müşderileri, karzlary we tölegleri yzarlaň\n'
+        '• Balans we möhleti geçen bergiler awtomatik hasaplanýar\n'
+        '• Ähli amallaryň hereket akymy\n'
+        '• Her karz ýa-da tölegden soň SMS kwitansiýa\n'
+        '• Hasabatlar we Excel eksporty\n'
+        '• Maglumatlary ätiýaçlandyryň, dikeldiň we paýlaşyň\n'
+        '• Türkmen, iňlis we rus dilleri · açyk we garaňky tema',
+    'ru': '• Учёт клиентов, долгов и оплат\n'
+        '• Автоматический подсчёт баланса и просрочек\n'
+        '• Лента всех операций\n'
+        '• SMS-квитанция после каждого долга или оплаты\n'
+        '• Отчёты и экспорт в Excel\n'
+        '• Резервное копирование, восстановление и обмен данными\n'
+        '• Туркменский, английский и русский · светлая и тёмная темы',
+  },
+  // Customize message
+  'customizeMessage': {'en': 'Customize message', 'tk': 'Habary sazlaň', 'ru': 'Настроить сообщение'},
+  'customizeMessageHint': {
+    'en': 'These templates are used for the SMS receipt. Placeholders below are replaced automatically.',
+    'tk': 'Bu şablonlar SMS kwitansiýasy üçin ulanylýar. Aşakdaky orunbasarlar awtomatik çalşyrylýar.',
+    'ru': 'Эти шаблоны используются для SMS-квитанции. Плейсхолдеры ниже подставляются автоматически.'
+  },
+  'placeholdersLabel': {
+    'en': 'Placeholders: {name} {amount} {date} {balance}',
+    'tk': 'Orunbasarlar: {name} {amount} {date} {balance}',
+    'ru': 'Плейсхолдеры: {name} {amount} {date} {balance}'
+  },
+  'creditMessageLabel': {'en': 'Credit added message', 'tk': 'Karz ýazyldy habary', 'ru': 'Сообщение о долге'},
+  'paymentMessageLabel': {'en': 'Payment received message', 'tk': 'Töleg kabul edildi habary', 'ru': 'Сообщение об оплате'},
+  'resetToDefault': {'en': 'Reset to default', 'tk': 'Öňki ýagdaýyna getir', 'ru': 'Сбросить'},
+  'saved': {'en': 'Saved', 'tk': 'Ýatda saklandy', 'ru': 'Сохранено'},
+  'save': {'en': 'Save', 'tk': 'Ýatda sakla', 'ru': 'Сохранить'},
   'aboutOfflineTitle': {'en': 'Offline-first', 'tk': 'Oflaýn ileri tutulýan', 'ru': 'Работает офлайн'},
   'aboutOfflineBody': {
     'en':
